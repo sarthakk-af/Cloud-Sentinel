@@ -1,0 +1,5 @@
+error_pattern,explanation,action
+out of memory,System is running out of RAM. Killing heavy processes.,python scripts/clear_ram.py
+Failed password,Unauthorized login attempt detected. Potential security risk.,python scripts/block_ip.py
+exit-code,The Web Server (Apache) has crashed.,python scripts/restart_service.py
+full,The hard drive is 100% full. Deleting temporary files.,python scripts/cleanup.py
