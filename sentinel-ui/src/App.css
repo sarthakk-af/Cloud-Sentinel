@@ -1,0 +1,54 @@
+body {
+  background: #0f172a;
+  color: white;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.container {
+  padding: 40px;
+  text-align: center;
+}
+
+.card {
+  background: #1e293b;
+  padding: 25px;
+  border-radius: 12px;
+  width: 350px;
+  margin: auto;
+  box-shadow: 0px 0px 15px rgba(0,0,0,0.4);
+}
+
+h1 {
+  margin-bottom: 30px;
+}
+
+p {
+  margin: 8px 0;
+}
+.console {
+  background: #000814;
+  border: 1px solid #1e293b;
+  border-radius: 12px;
+  padding: 14px;
+  max-height: 320px;
+  overflow-y: auto;
+}
+
+.stream-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.pulse {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #064e3b;
+  transition: 0.2s;
+}
+
+.pulse.active {
+  background: #22c55e;
+  box-shadow: 0 0 12px #22c55e;
+}

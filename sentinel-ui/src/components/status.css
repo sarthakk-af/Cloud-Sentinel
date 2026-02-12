@@ -1,0 +1,31 @@
+.statusbar {
+  display: flex;
+  gap: 18px;
+  margin-bottom: 25px;
+  flex-wrap: wrap;
+}
+
+.pill {
+  background: #020617;
+  border: 1px solid #1e293b;
+  border-radius: 999px;
+  padding: 8px 14px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+}
+
+.dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}
+
+.pill-label {
+  color: #64748b;
+}
+
+.pill-value {
+  font-weight: 600;
+}
