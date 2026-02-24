@@ -9890,3 +9890,565 @@ Feb 24 14:26:51 server1 sshd[5678]: Connection closed by authenticating user adm
 Feb 24 14:26:56 server1 systemd[1]: apache2.service: Failed with result 'exit-code'.
 Feb 24 14:27:03 server1 systemd[1]: apache2.service: Failed with result 'exit-code'.
 Feb 24 14:27:08 server1 sshd[1234]: Failed password for root from 192.168.1.50
+Feb 24 14:27:14 server1 sshd[1234]: Failed password for root from 192.168.1.50
+Feb 24 14:27:20 server1 systemd[1]: apache2.service: Failed with result 'exit-code'.
+Feb 24 14:27:26 server1 systemd[1]: apache2.service: Failed with result 'exit-code'.
+Feb 24 14:27:31 server1 kernel: [123.45] out of memory: kill process
+Feb 24 14:27:34 server1 systemd[1]: apache2.service: Failed with result 'exit-code'.
+Feb 24 14:27:39 server1 sshd[5678]: Connection closed by authenticating user admin
+Feb 24 14:27:45 server1 kernel: [987.65] partition /dev/sda1 is full (100%)
+Feb 24 14:27:49 server1 sshd[5678]: Connection closed by authenticating user admin
+Feb 24 14:27:52 server1 sshd[5678]: Connection closed by authenticating user admin
+Feb 24 14:27:55 server1 sshd[5678]: Connection closed by authenticating user admin
+Feb 24 14:27:59 server1 kernel: [123.45] out of memory: kill process
+Feb 24 14:28:06 server1 kernel: [987.65] partition /dev/sda1 is full (100%)
+Feb 24 14:28:10 server1 kernel: [123.45] out of memory: kill process
+Feb 24 14:28:15 server1 sshd[5678]: Connection closed by authenticating user admin
+Feb 24 14:28:18 server1 systemd[1]: apache2.service: Failed with result 'exit-code'.
+Feb 24 14:28:22 server1 kernel: [987.65] partition /dev/sda1 is full (100%)
+Feb 24 14:28:25 server1 kernel: [987.65] partition /dev/sda1 is full (100%)
+Feb 24 14:28:30 server1 sshd[5678]: Connection closed by authenticating user admin
+Feb 24 14:28:33 server1 sshd[5678]: Connection closed by authenticating user admin
+Feb 24 14:28:40 server1 systemd[1]: apache2.service: Failed with result 'exit-code'.
+Feb 24 14:28:47 server1 systemd[1]: apache2.service: Failed with result 'exit-code'.
+Feb 24 14:28:53 server1 systemd[1]: apache2.service: Failed with result 'exit-code'.
+Feb 24 14:29:00 server1 systemd[1]: apache2.service: Failed with result 'exit-code'.
+Feb 24 14:29:05 server1 kernel: [123.45] out of memory: kill process
+Feb 24 14:29:08 server1 sshd[5678]: Connection closed by authenticating user admin
+Feb 24 14:29:15 server1 sshd[1234]: Failed password for root from 192.168.1.50
+Feb 24 14:29:20 server1 kernel: [987.65] partition /dev/sda1 is full (100%)
+Feb 24 14:29:23 server1 kernel: [987.65] partition /dev/sda1 is full (100%)
+Feb 24 14:29:28 server1 systemd[1]: apache2.service: Failed with result 'exit-code'.
+Feb 24 14:29:33 server1 sshd[1234]: Failed password for root from 192.168.1.50
+Feb 24 14:29:39 server1 sshd[1234]: Failed password for root from 192.168.1.50
+Feb 24 14:29:42 server1 kernel: [123.45] out of memory: kill process
+Feb 24 14:29:45 server1 systemd[1]: apache2.service: Failed with result 'exit-code'.
+Feb 24 14:29:50 server1 kernel: [123.45] out of memory: kill process
+Feb 24 14:29:53 server1 kernel: [123.45] out of memory: kill process
+Feb 24 14:29:59 server1 sshd[5678]: Connection closed by authenticating user admin
+Feb 24 14:30:03 server1 systemd[1]: apache2.service: Failed with result 'exit-code'.
+Feb 24 14:30:08 server1 kernel: [123.45] out of memory: kill process
+Feb 24 14:30:15 server1 sshd[1234]: Failed password for root from 192.168.1.50
+Feb 24 14:30:21 server1 sshd[1234]: Failed password for root from 192.168.1.50
+Feb 24 14:30:24 server1 kernel: [123.45] out of memory: kill process
+Feb 24 14:30:28 server1 kernel: [123.45] out of memory: kill process
+Feb 24 14:30:34 server1 sshd[5678]: Connection closed by authenticating user admin
+Feb 24 14:30:38 server1 systemd[1]: apache2.service: Failed with result 'exit-code'.
+Feb 24 14:30:43 server1 systemd[1]: apache2.service: Failed with result 'exit-code'.
+Feb 24 14:30:48 server1 systemd[1]: apache2.service: Failed with result 'exit-code'.
+Feb 24 14:30:55 server1 systemd[1]: apache2.service: Failed with result 'exit-code'.
+Feb 24 14:30:59 server1 kernel: [123.45] out of memory: kill process
+Feb 24 14:31:06 server1 sshd[1234]: Failed password for root from 192.168.1.50
+Feb 24 14:31:11 server1 kernel: [123.45] out of memory: kill process
+Feb 24 14:31:16 server1 sshd[5678]: Connection closed by authenticating user admin
+Feb 24 14:31:19 server1 kernel: [123.45] out of memory: kill process
+Feb 24 14:31:26 server1 kernel: [987.65] partition /dev/sda1 is full (100%)
+Feb 24 14:31:31 server1 sshd[1234]: Failed password for root from 192.168.1.50
+Feb 24 14:31:36 server1 kernel: [123.45] out of memory: kill process
+Feb 24 14:31:43 server1 systemd[1]: apache2.service: Failed with result 'exit-code'.
+Feb 24 14:31:49 server1 sshd[1234]: Failed password for root from 192.168.1.50
+Feb 24 14:31:55 server1 systemd[1]: apache2.service: Failed with result 'exit-code'.
+Feb 24 14:31:59 server1 kernel: [987.65] partition /dev/sda1 is full (100%)
+Feb 24 14:32:04 server1 sshd[1234]: Failed password for root from 192.168.1.50
+Feb 24 14:32:07 server1 kernel: [123.45] out of memory: kill process
+Feb 24 14:32:12 server1 kernel: [987.65] partition /dev/sda1 is full (100%)
+Feb 24 14:32:15 server1 sshd[5678]: Connection closed by authenticating user admin
+Feb 24 14:32:18 server1 kernel: [987.65] partition /dev/sda1 is full (100%)
+Feb 24 14:32:21 server1 kernel: [987.65] partition /dev/sda1 is full (100%)
+Feb 24 14:32:26 server1 kernel: [123.45] out of memory: kill process
+Feb 24 14:32:33 server1 systemd[1]: apache2.service: Failed with result 'exit-code'.
+Feb 24 14:32:37 server1 sshd[1234]: Failed password for root from 192.168.1.50
+Feb 24 14:32:43 server1 sshd[5678]: Connection closed by authenticating user admin
+Feb 24 14:32:50 server1 sshd[5678]: Connection closed by authenticating user admin
+Feb 24 14:32:53 server1 kernel: [987.65] partition /dev/sda1 is full (100%)
+Feb 24 14:32:56 server1 sshd[5678]: Connection closed by authenticating user admin
+Feb 24 14:33:02 server1 kernel: [123.45] out of memory: kill process
+Feb 24 14:33:06 server1 kernel: [123.45] out of memory: kill process
+Feb 24 14:33:12 server1 sshd[5678]: Connection closed by authenticating user admin
+Feb 24 14:33:18 server1 kernel: [987.65] partition /dev/sda1 is full (100%)
+Feb 24 14:33:21 server1 sshd[5678]: Connection closed by authenticating user admin
+Feb 24 14:33:25 server1 sshd[5678]: Connection closed by authenticating user admin
+Feb 24 14:33:32 server1 systemd[1]: apache2.service: Failed with result 'exit-code'.
+Feb 24 14:33:36 server1 sshd[1234]: Failed password for root from 192.168.1.50
+Feb 24 14:33:43 server1 sshd[5678]: Connection closed by authenticating user admin
+Feb 24 14:33:48 server1 kernel: [123.45] out of memory: kill process
+Feb 24 14:33:54 server1 kernel: [123.45] out of memory: kill process
+Feb 24 14:33:59 server1 kernel: [123.45] out of memory: kill process
+Feb 24 14:34:06 server1 systemd[1]: apache2.service: Failed with result 'exit-code'.
+Feb 24 14:34:09 server1 sshd[1234]: Failed password for root from 192.168.1.50
+Feb 24 14:34:15 server1 systemd[1]: apache2.service: Failed with result 'exit-code'.
+Feb 24 14:34:22 server1 kernel: [123.45] out of memory: kill process
+Feb 24 14:34:28 server1 kernel: [123.45] out of memory: kill process
+Feb 24 14:34:35 server1 kernel: [123.45] out of memory: kill process
+Feb 24 14:34:41 server1 kernel: [123.45] out of memory: kill process
+Feb 24 14:34:47 server1 kernel: [987.65] partition /dev/sda1 is full (100%)
+Feb 24 14:34:53 server1 kernel: [123.45] out of memory: kill process
+Feb 24 14:34:58 server1 kernel: [987.65] partition /dev/sda1 is full (100%)
+Feb 24 14:35:01 server1 systemd[1]: apache2.service: Failed with result 'exit-code'.
+Feb 24 14:35:04 server1 kernel: [123.45] out of memory: kill process
+Feb 24 14:35:11 server1 kernel: [987.65] partition /dev/sda1 is full (100%)
+Feb 24 14:35:14 server1 systemd[1]: apache2.service: Failed with result 'exit-code'.
+Feb 24 14:35:20 server1 sshd[5678]: Connection closed by authenticating user admin
+Feb 24 14:35:27 server1 sshd[1234]: Failed password for root from 192.168.1.50
+Feb 24 14:35:31 server1 kernel: [123.45] out of memory: kill process
+Feb 24 14:35:36 server1 kernel: [987.65] partition /dev/sda1 is full (100%)
+Feb 24 14:35:42 server1 sshd[1234]: Failed password for root from 192.168.1.50
+Feb 24 14:35:45 server1 sshd[5678]: Connection closed by authenticating user admin
+Feb 24 14:35:48 server1 sshd[5678]: Connection closed by authenticating user admin
+Feb 24 14:35:54 server1 kernel: [987.65] partition /dev/sda1 is full (100%)
+Feb 24 14:36:00 server1 systemd[1]: apache2.service: Failed with result 'exit-code'.
+Feb 24 14:36:07 server1 kernel: [987.65] partition /dev/sda1 is full (100%)
+Feb 24 14:36:11 server1 kernel: [987.65] partition /dev/sda1 is full (100%)
+Feb 24 14:36:14 server1 kernel: [123.45] out of memory: kill process
+Feb 24 14:36:18 server1 systemd[1]: apache2.service: Failed with result 'exit-code'.
+Feb 24 14:36:23 server1 sshd[5678]: Connection closed by authenticating user admin
+Feb 24 14:36:29 server1 kernel: [123.45] out of memory: kill process
+Feb 24 14:36:35 server1 systemd[1]: apache2.service: Failed with result 'exit-code'.
+Feb 24 14:36:42 server1 sshd[1234]: Failed password for root from 192.168.1.50
+Feb 24 14:36:45 server1 sshd[5678]: Connection closed by authenticating user admin
+Feb 24 14:36:51 server1 kernel: [987.65] partition /dev/sda1 is full (100%)
+Feb 24 14:36:54 server1 kernel: [123.45] out of memory: kill process
+Feb 24 14:37:01 server1 kernel: [123.45] out of memory: kill process
+Feb 24 14:37:07 server1 sshd[1234]: Failed password for root from 192.168.1.50
+Feb 24 14:37:11 server1 systemd[1]: apache2.service: Failed with result 'exit-code'.
+Feb 24 14:37:15 server1 kernel: [123.45] out of memory: kill process
+Feb 24 14:37:22 server1 systemd[1]: apache2.service: Failed with result 'exit-code'.
+Feb 24 14:37:27 server1 kernel: [123.45] out of memory: kill process
+Feb 24 14:37:33 server1 systemd[1]: apache2.service: Failed with result 'exit-code'.
+Feb 24 14:37:36 server1 sshd[1234]: Failed password for root from 192.168.1.50
+Feb 24 14:37:41 server1 sshd[1234]: Failed password for root from 192.168.1.50
+Feb 24 14:37:48 server1 sshd[5678]: Connection closed by authenticating user admin
+Feb 24 14:37:51 server1 sshd[5678]: Connection closed by authenticating user admin
+Feb 24 14:37:57 server1 systemd[1]: apache2.service: Failed with result 'exit-code'.
+Feb 24 14:38:01 server1 systemd[1]: apache2.service: Failed with result 'exit-code'.
+Feb 24 14:38:04 server1 sshd[5678]: Connection closed by authenticating user admin
+Feb 24 14:38:07 server1 systemd[1]: apache2.service: Failed with result 'exit-code'.
+Feb 24 14:38:11 server1 sshd[1234]: Failed password for root from 192.168.1.50
+Feb 24 14:38:15 server1 sshd[5678]: Connection closed by authenticating user admin
+Feb 24 14:38:18 server1 sshd[1234]: Failed password for root from 192.168.1.50
+Feb 24 14:38:21 server1 sshd[1234]: Failed password for root from 192.168.1.50
+Feb 24 14:38:25 server1 kernel: [987.65] partition /dev/sda1 is full (100%)
+Feb 24 14:38:28 server1 kernel: [123.45] out of memory: kill process
+Feb 24 14:38:35 server1 kernel: [987.65] partition /dev/sda1 is full (100%)
+Feb 24 14:38:42 server1 kernel: [123.45] out of memory: kill process
+Feb 24 14:38:46 server1 sshd[5678]: Connection closed by authenticating user admin
+Feb 24 14:38:52 server1 systemd[1]: apache2.service: Failed with result 'exit-code'.
+Feb 24 14:38:57 server1 systemd[1]: apache2.service: Failed with result 'exit-code'.
+Feb 24 14:39:04 server1 systemd[1]: apache2.service: Failed with result 'exit-code'.
+Feb 24 14:39:09 server1 systemd[1]: apache2.service: Failed with result 'exit-code'.
+Feb 24 14:39:14 server1 sshd[1234]: Failed password for root from 192.168.1.50
+Feb 24 14:39:21 server1 kernel: [987.65] partition /dev/sda1 is full (100%)
+Feb 24 14:39:25 server1 systemd[1]: apache2.service: Failed with result 'exit-code'.
+Feb 24 14:39:31 server1 kernel: [123.45] out of memory: kill process
+Feb 24 14:39:37 server1 kernel: [123.45] out of memory: kill process
+Feb 24 14:39:42 server1 kernel: [123.45] out of memory: kill process
+Feb 24 14:39:46 server1 sshd[5678]: Connection closed by authenticating user admin
+Feb 24 14:39:53 server1 sshd[1234]: Failed password for root from 192.168.1.50
+Feb 24 14:39:59 server1 systemd[1]: apache2.service: Failed with result 'exit-code'.
+Feb 24 14:40:05 server1 sshd[5678]: Connection closed by authenticating user admin
+Feb 24 14:40:10 server1 sshd[5678]: Connection closed by authenticating user admin
+Feb 24 14:40:17 server1 kernel: [987.65] partition /dev/sda1 is full (100%)
+Feb 24 14:40:22 server1 kernel: [123.45] out of memory: kill process
+Feb 24 14:40:25 server1 kernel: [987.65] partition /dev/sda1 is full (100%)
+Feb 24 14:40:31 server1 kernel: [987.65] partition /dev/sda1 is full (100%)
+Feb 24 14:40:37 server1 systemd[1]: apache2.service: Failed with result 'exit-code'.
+Feb 24 14:40:43 server1 kernel: [987.65] partition /dev/sda1 is full (100%)
+Feb 24 14:40:48 server1 kernel: [987.65] partition /dev/sda1 is full (100%)
+Feb 24 14:40:51 server1 sshd[5678]: Connection closed by authenticating user admin
+Feb 24 14:40:54 server1 kernel: [987.65] partition /dev/sda1 is full (100%)
+Feb 24 14:40:59 server1 systemd[1]: apache2.service: Failed with result 'exit-code'.
+Feb 24 14:41:02 server1 systemd[1]: apache2.service: Failed with result 'exit-code'.
+Feb 24 14:41:08 server1 sshd[5678]: Connection closed by authenticating user admin
+Feb 24 14:41:12 server1 systemd[1]: apache2.service: Failed with result 'exit-code'.
+Feb 24 14:41:18 server1 kernel: [987.65] partition /dev/sda1 is full (100%)
+Feb 24 14:41:21 server1 kernel: [123.45] out of memory: kill process
+Feb 24 14:41:27 server1 systemd[1]: apache2.service: Failed with result 'exit-code'.
+Feb 24 14:41:32 server1 kernel: [123.45] out of memory: kill process
+Feb 24 14:41:37 server1 sshd[1234]: Failed password for root from 192.168.1.50
+Feb 24 14:41:44 server1 sshd[5678]: Connection closed by authenticating user admin
+Feb 24 14:41:51 server1 systemd[1]: apache2.service: Failed with result 'exit-code'.
+Feb 24 14:41:56 server1 systemd[1]: apache2.service: Failed with result 'exit-code'.
+Feb 24 14:42:03 server1 kernel: [123.45] out of memory: kill process
+Feb 24 14:42:07 server1 kernel: [123.45] out of memory: kill process
+Feb 24 14:42:12 server1 sshd[1234]: Failed password for root from 192.168.1.50
+Feb 24 14:42:18 server1 systemd[1]: apache2.service: Failed with result 'exit-code'.
+Feb 24 14:42:23 server1 sshd[1234]: Failed password for root from 192.168.1.50
+Feb 24 14:42:27 server1 kernel: [987.65] partition /dev/sda1 is full (100%)
+Feb 24 14:42:33 server1 kernel: [987.65] partition /dev/sda1 is full (100%)
+Feb 24 14:42:37 server1 kernel: [123.45] out of memory: kill process
+Feb 24 14:42:41 server1 kernel: [123.45] out of memory: kill process
+Feb 24 14:42:46 server1 systemd[1]: apache2.service: Failed with result 'exit-code'.
+Feb 24 14:42:52 server1 kernel: [987.65] partition /dev/sda1 is full (100%)
+Feb 24 14:42:57 server1 kernel: [987.65] partition /dev/sda1 is full (100%)
+Feb 24 14:43:04 server1 kernel: [987.65] partition /dev/sda1 is full (100%)
+Feb 24 14:43:08 server1 kernel: [987.65] partition /dev/sda1 is full (100%)
+Feb 24 14:43:12 server1 systemd[1]: apache2.service: Failed with result 'exit-code'.
+Feb 24 14:43:16 server1 kernel: [123.45] out of memory: kill process
+Feb 24 14:43:20 server1 systemd[1]: apache2.service: Failed with result 'exit-code'.
+Feb 24 14:43:26 server1 sshd[5678]: Connection closed by authenticating user admin
+Feb 24 14:43:30 server1 sshd[5678]: Connection closed by authenticating user admin
+Feb 24 14:43:33 server1 sshd[5678]: Connection closed by authenticating user admin
+Feb 24 14:43:40 server1 sshd[1234]: Failed password for root from 192.168.1.50
+Feb 24 14:43:44 server1 kernel: [987.65] partition /dev/sda1 is full (100%)
+Feb 24 14:43:47 server1 sshd[1234]: Failed password for root from 192.168.1.50
+Feb 24 14:43:52 server1 kernel: [123.45] out of memory: kill process
+Feb 24 14:43:57 server1 systemd[1]: apache2.service: Failed with result 'exit-code'.
+Feb 24 14:44:03 server1 sshd[5678]: Connection closed by authenticating user admin
+Feb 24 14:44:08 server1 sshd[1234]: Failed password for root from 192.168.1.50
+Feb 24 14:44:12 server1 kernel: [123.45] out of memory: kill process
+Feb 24 14:44:19 server1 kernel: [123.45] out of memory: kill process
+Feb 24 14:44:24 server1 kernel: [123.45] out of memory: kill process
+Feb 24 14:44:31 server1 kernel: [123.45] out of memory: kill process
+Feb 24 14:44:38 server1 systemd[1]: apache2.service: Failed with result 'exit-code'.
+Feb 24 14:44:41 server1 sshd[5678]: Connection closed by authenticating user admin
+Feb 24 14:44:48 server1 kernel: [987.65] partition /dev/sda1 is full (100%)
+Feb 24 14:44:53 server1 kernel: [987.65] partition /dev/sda1 is full (100%)
+Feb 24 14:44:57 server1 kernel: [987.65] partition /dev/sda1 is full (100%)
+Feb 24 14:45:04 server1 kernel: [123.45] out of memory: kill process
+Feb 24 14:45:08 server1 sshd[1234]: Failed password for root from 192.168.1.50
+Feb 24 14:45:14 server1 kernel: [987.65] partition /dev/sda1 is full (100%)
+Feb 24 14:45:18 server1 kernel: [123.45] out of memory: kill process
+Feb 24 14:45:23 server1 sshd[1234]: Failed password for root from 192.168.1.50
+Feb 24 14:45:26 server1 kernel: [987.65] partition /dev/sda1 is full (100%)
+Feb 24 14:45:31 server1 sshd[5678]: Connection closed by authenticating user admin
+Feb 24 14:45:34 server1 sshd[5678]: Connection closed by authenticating user admin
+Feb 24 14:45:37 server1 kernel: [987.65] partition /dev/sda1 is full (100%)
+Feb 24 14:45:43 server1 kernel: [123.45] out of memory: kill process
+Feb 24 14:45:49 server1 kernel: [987.65] partition /dev/sda1 is full (100%)
+Feb 24 14:45:53 server1 sshd[5678]: Connection closed by authenticating user admin
+Feb 24 14:45:57 server1 sshd[5678]: Connection closed by authenticating user admin
+Feb 24 14:46:04 server1 sshd[5678]: Connection closed by authenticating user admin
+Feb 24 14:46:07 server1 sshd[1234]: Failed password for root from 192.168.1.50
+Feb 24 14:46:13 server1 systemd[1]: apache2.service: Failed with result 'exit-code'.
+Feb 24 14:46:17 server1 kernel: [987.65] partition /dev/sda1 is full (100%)
+Feb 24 14:46:20 server1 sshd[1234]: Failed password for root from 192.168.1.50
+Feb 24 14:46:27 server1 kernel: [987.65] partition /dev/sda1 is full (100%)
+Feb 24 14:46:32 server1 kernel: [123.45] out of memory: kill process
+Feb 24 14:46:35 server1 systemd[1]: apache2.service: Failed with result 'exit-code'.
+Feb 24 14:46:38 server1 sshd[1234]: Failed password for root from 192.168.1.50
+Feb 24 14:46:41 server1 kernel: [987.65] partition /dev/sda1 is full (100%)
+Feb 24 14:46:44 server1 sshd[5678]: Connection closed by authenticating user admin
+Feb 24 14:46:49 server1 kernel: [987.65] partition /dev/sda1 is full (100%)
+Feb 24 14:46:52 server1 sshd[5678]: Connection closed by authenticating user admin
+Feb 24 14:46:59 server1 systemd[1]: apache2.service: Failed with result 'exit-code'.
+Feb 24 14:47:03 server1 kernel: [123.45] out of memory: kill process
+Feb 24 14:47:10 server1 kernel: [987.65] partition /dev/sda1 is full (100%)
+Feb 24 14:47:16 server1 sshd[5678]: Connection closed by authenticating user admin
+Feb 24 14:47:19 server1 sshd[5678]: Connection closed by authenticating user admin
+Feb 24 14:47:26 server1 kernel: [987.65] partition /dev/sda1 is full (100%)
+Feb 24 14:47:30 server1 kernel: [123.45] out of memory: kill process
+Feb 24 14:47:35 server1 systemd[1]: apache2.service: Failed with result 'exit-code'.
+Feb 24 14:47:38 server1 sshd[5678]: Connection closed by authenticating user admin
+Feb 24 14:47:45 server1 kernel: [123.45] out of memory: kill process
+Feb 24 14:47:52 server1 sshd[5678]: Connection closed by authenticating user admin
+Feb 24 14:47:57 server1 sshd[1234]: Failed password for root from 192.168.1.50
+Feb 24 14:48:00 server1 kernel: [123.45] out of memory: kill process
+Feb 24 14:48:05 server1 sshd[5678]: Connection closed by authenticating user admin
+Feb 24 14:48:10 server1 kernel: [123.45] out of memory: kill process
+Feb 24 14:48:15 server1 sshd[5678]: Connection closed by authenticating user admin
+Feb 24 14:48:20 server1 kernel: [987.65] partition /dev/sda1 is full (100%)
+Feb 24 14:48:24 server1 sshd[1234]: Failed password for root from 192.168.1.50
+Feb 24 14:48:27 server1 kernel: [987.65] partition /dev/sda1 is full (100%)
+Feb 24 14:48:33 server1 kernel: [987.65] partition /dev/sda1 is full (100%)
+Feb 24 14:48:36 server1 sshd[5678]: Connection closed by authenticating user admin
+Feb 24 14:48:42 server1 systemd[1]: apache2.service: Failed with result 'exit-code'.
+Feb 24 14:48:48 server1 sshd[1234]: Failed password for root from 192.168.1.50
+Feb 24 14:48:51 server1 kernel: [123.45] out of memory: kill process
+Feb 24 14:48:57 server1 kernel: [123.45] out of memory: kill process
+Feb 24 14:49:01 server1 kernel: [123.45] out of memory: kill process
+Feb 24 14:49:08 server1 kernel: [987.65] partition /dev/sda1 is full (100%)
+Feb 24 14:49:14 server1 systemd[1]: apache2.service: Failed with result 'exit-code'.
+Feb 24 14:49:18 server1 kernel: [123.45] out of memory: kill process
+Feb 24 14:49:21 server1 systemd[1]: apache2.service: Failed with result 'exit-code'.
+Feb 24 14:49:26 server1 sshd[1234]: Failed password for root from 192.168.1.50
+Feb 24 14:49:31 server1 sshd[5678]: Connection closed by authenticating user admin
+Feb 24 14:49:36 server1 systemd[1]: apache2.service: Failed with result 'exit-code'.
+Feb 24 14:49:40 server1 systemd[1]: apache2.service: Failed with result 'exit-code'.
+Feb 24 14:49:46 server1 sshd[5678]: Connection closed by authenticating user admin
+Feb 24 14:49:49 server1 sshd[1234]: Failed password for root from 192.168.1.50
+Feb 24 14:49:53 server1 kernel: [987.65] partition /dev/sda1 is full (100%)
+Feb 24 14:49:56 server1 sshd[5678]: Connection closed by authenticating user admin
+Feb 24 14:50:00 server1 sshd[1234]: Failed password for root from 192.168.1.50
+Feb 24 14:50:05 server1 systemd[1]: apache2.service: Failed with result 'exit-code'.
+Feb 24 14:50:11 server1 systemd[1]: apache2.service: Failed with result 'exit-code'.
+Feb 24 14:50:18 server1 kernel: [123.45] out of memory: kill process
+Feb 24 14:50:24 server1 systemd[1]: apache2.service: Failed with result 'exit-code'.
+Feb 24 14:50:29 server1 systemd[1]: apache2.service: Failed with result 'exit-code'.
+Feb 24 14:50:32 server1 kernel: [987.65] partition /dev/sda1 is full (100%)
+Feb 24 14:50:39 server1 kernel: [123.45] out of memory: kill process
+Feb 24 14:50:43 server1 sshd[5678]: Connection closed by authenticating user admin
+Feb 24 14:50:48 server1 systemd[1]: apache2.service: Failed with result 'exit-code'.
+Feb 24 14:50:51 server1 kernel: [123.45] out of memory: kill process
+Feb 24 14:50:54 server1 systemd[1]: apache2.service: Failed with result 'exit-code'.
+Feb 24 14:50:57 server1 kernel: [123.45] out of memory: kill process
+Feb 24 14:51:04 server1 kernel: [123.45] out of memory: kill process
+Feb 24 14:51:11 server1 sshd[1234]: Failed password for root from 192.168.1.50
+Feb 24 14:51:17 server1 sshd[1234]: Failed password for root from 192.168.1.50
+Feb 24 14:51:22 server1 sshd[1234]: Failed password for root from 192.168.1.50
+Feb 24 14:51:29 server1 sshd[5678]: Connection closed by authenticating user admin
+Feb 24 14:51:36 server1 kernel: [123.45] out of memory: kill process
+Feb 24 14:51:43 server1 systemd[1]: apache2.service: Failed with result 'exit-code'.
+Feb 24 14:51:49 server1 sshd[5678]: Connection closed by authenticating user admin
+Feb 24 14:51:54 server1 kernel: [123.45] out of memory: kill process
+Feb 24 14:51:59 server1 kernel: [123.45] out of memory: kill process
+Feb 24 14:52:06 server1 systemd[1]: apache2.service: Failed with result 'exit-code'.
+Feb 24 14:52:09 server1 systemd[1]: apache2.service: Failed with result 'exit-code'.
+Feb 24 14:52:14 server1 kernel: [123.45] out of memory: kill process
+Feb 24 14:52:20 server1 systemd[1]: apache2.service: Failed with result 'exit-code'.
+Feb 24 14:52:25 server1 sshd[1234]: Failed password for root from 192.168.1.50
+Feb 24 14:52:28 server1 kernel: [123.45] out of memory: kill process
+Feb 24 14:52:33 server1 sshd[1234]: Failed password for root from 192.168.1.50
+Feb 24 14:52:40 server1 sshd[5678]: Connection closed by authenticating user admin
+Feb 24 14:52:43 server1 sshd[1234]: Failed password for root from 192.168.1.50
+Feb 24 14:52:48 server1 kernel: [987.65] partition /dev/sda1 is full (100%)
+Feb 24 14:52:51 server1 systemd[1]: apache2.service: Failed with result 'exit-code'.
+Feb 24 14:52:56 server1 kernel: [987.65] partition /dev/sda1 is full (100%)
+Feb 24 14:53:00 server1 systemd[1]: apache2.service: Failed with result 'exit-code'.
+Feb 24 14:53:05 server1 kernel: [987.65] partition /dev/sda1 is full (100%)
+Feb 24 14:53:12 server1 kernel: [123.45] out of memory: kill process
+Feb 24 14:53:17 server1 sshd[5678]: Connection closed by authenticating user admin
+Feb 24 14:53:22 server1 systemd[1]: apache2.service: Failed with result 'exit-code'.
+Feb 24 14:53:26 server1 sshd[1234]: Failed password for root from 192.168.1.50
+Feb 24 14:53:30 server1 sshd[1234]: Failed password for root from 192.168.1.50
+Feb 24 14:53:34 server1 kernel: [123.45] out of memory: kill process
+Feb 24 14:53:41 server1 sshd[5678]: Connection closed by authenticating user admin
+Feb 24 14:53:48 server1 sshd[1234]: Failed password for root from 192.168.1.50
+Feb 24 14:53:51 server1 sshd[1234]: Failed password for root from 192.168.1.50
+Feb 24 14:53:58 server1 systemd[1]: apache2.service: Failed with result 'exit-code'.
+Feb 24 14:54:05 server1 kernel: [987.65] partition /dev/sda1 is full (100%)
+Feb 24 14:54:10 server1 kernel: [123.45] out of memory: kill process
+Feb 24 14:54:15 server1 kernel: [123.45] out of memory: kill process
+Feb 24 14:54:20 server1 sshd[1234]: Failed password for root from 192.168.1.50
+Feb 24 14:54:25 server1 sshd[1234]: Failed password for root from 192.168.1.50
+Feb 24 14:54:30 server1 kernel: [123.45] out of memory: kill process
+Feb 24 14:54:33 server1 sshd[1234]: Failed password for root from 192.168.1.50
+Feb 24 14:54:40 server1 kernel: [987.65] partition /dev/sda1 is full (100%)
+Feb 24 14:54:45 server1 kernel: [123.45] out of memory: kill process
+Feb 24 14:54:52 server1 kernel: [123.45] out of memory: kill process
+Feb 24 14:54:59 server1 kernel: [987.65] partition /dev/sda1 is full (100%)
+Feb 24 14:55:03 server1 kernel: [123.45] out of memory: kill process
+Feb 24 14:55:09 server1 sshd[5678]: Connection closed by authenticating user admin
+Feb 24 14:55:13 server1 kernel: [987.65] partition /dev/sda1 is full (100%)
+Feb 24 14:55:19 server1 systemd[1]: apache2.service: Failed with result 'exit-code'.
+Feb 24 14:55:23 server1 sshd[1234]: Failed password for root from 192.168.1.50
+Feb 24 14:55:29 server1 kernel: [123.45] out of memory: kill process
+Feb 24 14:55:36 server1 kernel: [123.45] out of memory: kill process
+Feb 24 14:55:39 server1 kernel: [123.45] out of memory: kill process
+Feb 24 14:55:43 server1 systemd[1]: apache2.service: Failed with result 'exit-code'.
+Feb 24 14:55:48 server1 kernel: [123.45] out of memory: kill process
+Feb 24 14:55:53 server1 kernel: [123.45] out of memory: kill process
+Feb 24 14:55:56 server1 systemd[1]: apache2.service: Failed with result 'exit-code'.
+Feb 24 14:56:00 server1 sshd[5678]: Connection closed by authenticating user admin
+Feb 24 14:56:06 server1 sshd[5678]: Connection closed by authenticating user admin
+Feb 24 14:56:13 server1 kernel: [987.65] partition /dev/sda1 is full (100%)
+Feb 24 14:56:18 server1 sshd[1234]: Failed password for root from 192.168.1.50
+Feb 24 14:56:21 server1 kernel: [123.45] out of memory: kill process
+Feb 24 14:56:28 server1 systemd[1]: apache2.service: Failed with result 'exit-code'.
+Feb 24 14:56:31 server1 kernel: [123.45] out of memory: kill process
+Feb 24 14:56:37 server1 sshd[5678]: Connection closed by authenticating user admin
+Feb 24 14:56:40 server1 kernel: [123.45] out of memory: kill process
+Feb 24 14:56:47 server1 sshd[5678]: Connection closed by authenticating user admin
+Feb 24 14:56:52 server1 sshd[1234]: Failed password for root from 192.168.1.50
+Feb 24 14:56:56 server1 sshd[1234]: Failed password for root from 192.168.1.50
+Feb 24 14:57:03 server1 kernel: [123.45] out of memory: kill process
+Feb 24 14:57:09 server1 systemd[1]: apache2.service: Failed with result 'exit-code'.
+Feb 24 14:57:12 server1 sshd[1234]: Failed password for root from 192.168.1.50
+Feb 24 14:57:19 server1 systemd[1]: apache2.service: Failed with result 'exit-code'.
+Feb 24 14:57:22 server1 kernel: [987.65] partition /dev/sda1 is full (100%)
+Feb 24 14:57:26 server1 systemd[1]: apache2.service: Failed with result 'exit-code'.
+Feb 24 14:57:31 server1 sshd[1234]: Failed password for root from 192.168.1.50
+Feb 24 14:57:36 server1 kernel: [987.65] partition /dev/sda1 is full (100%)
+Feb 24 14:57:39 server1 systemd[1]: apache2.service: Failed with result 'exit-code'.
+Feb 24 14:57:44 server1 kernel: [987.65] partition /dev/sda1 is full (100%)
+Feb 24 14:57:50 server1 systemd[1]: apache2.service: Failed with result 'exit-code'.
+Feb 24 14:57:53 server1 systemd[1]: apache2.service: Failed with result 'exit-code'.
+Feb 24 14:57:57 server1 kernel: [987.65] partition /dev/sda1 is full (100%)
+Feb 24 14:58:00 server1 systemd[1]: apache2.service: Failed with result 'exit-code'.
+Feb 24 14:58:03 server1 kernel: [123.45] out of memory: kill process
+Feb 24 14:58:07 server1 sshd[5678]: Connection closed by authenticating user admin
+Feb 24 14:58:14 server1 sshd[5678]: Connection closed by authenticating user admin
+Feb 24 14:58:19 server1 systemd[1]: apache2.service: Failed with result 'exit-code'.
+Feb 24 14:58:26 server1 sshd[1234]: Failed password for root from 192.168.1.50
+Feb 24 14:58:33 server1 systemd[1]: apache2.service: Failed with result 'exit-code'.
+Feb 24 14:58:37 server1 sshd[5678]: Connection closed by authenticating user admin
+Feb 24 14:58:40 server1 sshd[1234]: Failed password for root from 192.168.1.50
+Feb 24 14:58:46 server1 sshd[1234]: Failed password for root from 192.168.1.50
+Feb 24 14:58:51 server1 kernel: [123.45] out of memory: kill process
+Feb 24 14:58:58 server1 systemd[1]: apache2.service: Failed with result 'exit-code'.
+Feb 24 14:59:02 server1 sshd[5678]: Connection closed by authenticating user admin
+Feb 24 14:59:08 server1 systemd[1]: apache2.service: Failed with result 'exit-code'.
+Feb 24 14:59:13 server1 kernel: [123.45] out of memory: kill process
+Feb 24 14:59:18 server1 kernel: [123.45] out of memory: kill process
+Feb 24 14:59:22 server1 kernel: [123.45] out of memory: kill process
+Feb 24 14:59:26 server1 kernel: [987.65] partition /dev/sda1 is full (100%)
+Feb 24 14:59:32 server1 systemd[1]: apache2.service: Failed with result 'exit-code'.
+Feb 24 14:59:37 server1 systemd[1]: apache2.service: Failed with result 'exit-code'.
+Feb 24 14:59:44 server1 kernel: [987.65] partition /dev/sda1 is full (100%)
+Feb 24 14:59:48 server1 sshd[5678]: Connection closed by authenticating user admin
+Feb 24 14:59:51 server1 sshd[5678]: Connection closed by authenticating user admin
+Feb 24 14:59:55 server1 systemd[1]: apache2.service: Failed with result 'exit-code'.
+Feb 24 14:59:58 server1 systemd[1]: apache2.service: Failed with result 'exit-code'.
+Feb 24 15:00:03 server1 kernel: [987.65] partition /dev/sda1 is full (100%)
+Feb 24 15:00:10 server1 kernel: [987.65] partition /dev/sda1 is full (100%)
+Feb 24 15:00:13 server1 kernel: [123.45] out of memory: kill process
+Feb 24 15:00:16 server1 kernel: [123.45] out of memory: kill process
+Feb 24 15:00:21 server1 systemd[1]: apache2.service: Failed with result 'exit-code'.
+Feb 24 15:00:24 server1 sshd[1234]: Failed password for root from 192.168.1.50
+Feb 24 15:00:31 server1 systemd[1]: apache2.service: Failed with result 'exit-code'.
+Feb 24 15:00:35 server1 systemd[1]: apache2.service: Failed with result 'exit-code'.
+Feb 24 15:00:42 server1 sshd[5678]: Connection closed by authenticating user admin
+Feb 24 15:00:45 server1 sshd[5678]: Connection closed by authenticating user admin
+Feb 24 15:00:51 server1 kernel: [123.45] out of memory: kill process
+Feb 24 15:00:56 server1 kernel: [123.45] out of memory: kill process
+Feb 24 15:01:00 server1 sshd[5678]: Connection closed by authenticating user admin
+Feb 24 15:01:03 server1 sshd[5678]: Connection closed by authenticating user admin
+Feb 24 15:01:10 server1 systemd[1]: apache2.service: Failed with result 'exit-code'.
+Feb 24 15:01:15 server1 kernel: [987.65] partition /dev/sda1 is full (100%)
+Feb 24 15:01:18 server1 kernel: [987.65] partition /dev/sda1 is full (100%)
+Feb 24 15:01:24 server1 sshd[1234]: Failed password for root from 192.168.1.50
+Feb 24 15:01:28 server1 kernel: [987.65] partition /dev/sda1 is full (100%)
+Feb 24 15:01:33 server1 kernel: [987.65] partition /dev/sda1 is full (100%)
+Feb 24 15:01:36 server1 kernel: [123.45] out of memory: kill process
+Feb 24 15:01:39 server1 kernel: [123.45] out of memory: kill process
+Feb 24 15:01:44 server1 systemd[1]: apache2.service: Failed with result 'exit-code'.
+Feb 24 15:01:50 server1 kernel: [123.45] out of memory: kill process
+Feb 24 15:01:55 server1 kernel: [987.65] partition /dev/sda1 is full (100%)
+Feb 24 15:01:58 server1 sshd[5678]: Connection closed by authenticating user admin
+Feb 24 15:02:01 server1 kernel: [987.65] partition /dev/sda1 is full (100%)
+Feb 24 15:02:07 server1 kernel: [123.45] out of memory: kill process
+Feb 24 15:02:10 server1 sshd[1234]: Failed password for root from 192.168.1.50
+Feb 24 15:02:17 server1 kernel: [123.45] out of memory: kill process
+Feb 24 15:02:21 server1 systemd[1]: apache2.service: Failed with result 'exit-code'.
+Feb 24 15:02:28 server1 sshd[5678]: Connection closed by authenticating user admin
+Feb 24 15:02:33 server1 kernel: [123.45] out of memory: kill process
+Feb 24 15:02:37 server1 sshd[1234]: Failed password for root from 192.168.1.50
+Feb 24 15:02:42 server1 sshd[5678]: Connection closed by authenticating user admin
+Feb 24 15:02:46 server1 sshd[1234]: Failed password for root from 192.168.1.50
+Feb 24 15:02:50 server1 kernel: [123.45] out of memory: kill process
+Feb 24 15:02:56 server1 systemd[1]: apache2.service: Failed with result 'exit-code'.
+Feb 24 15:03:01 server1 kernel: [123.45] out of memory: kill process
+Feb 24 15:03:04 server1 sshd[5678]: Connection closed by authenticating user admin
+Feb 24 15:03:07 server1 systemd[1]: apache2.service: Failed with result 'exit-code'.
+Feb 24 15:03:11 server1 systemd[1]: apache2.service: Failed with result 'exit-code'.
+Feb 24 15:03:18 server1 kernel: [123.45] out of memory: kill process
+Feb 24 15:03:24 server1 systemd[1]: apache2.service: Failed with result 'exit-code'.
+Feb 24 15:03:27 server1 kernel: [123.45] out of memory: kill process
+Feb 24 15:03:30 server1 sshd[1234]: Failed password for root from 192.168.1.50
+Feb 24 15:03:36 server1 sshd[1234]: Failed password for root from 192.168.1.50
+Feb 24 15:03:39 server1 kernel: [123.45] out of memory: kill process
+Feb 24 15:03:43 server1 sshd[1234]: Failed password for root from 192.168.1.50
+Feb 24 15:03:47 server1 kernel: [987.65] partition /dev/sda1 is full (100%)
+Feb 24 15:03:54 server1 systemd[1]: apache2.service: Failed with result 'exit-code'.
+Feb 24 15:03:59 server1 systemd[1]: apache2.service: Failed with result 'exit-code'.
+Feb 24 15:04:05 server1 kernel: [987.65] partition /dev/sda1 is full (100%)
+Feb 24 15:04:09 server1 sshd[5678]: Connection closed by authenticating user admin
+Feb 24 15:04:13 server1 systemd[1]: apache2.service: Failed with result 'exit-code'.
+Feb 24 15:04:17 server1 sshd[5678]: Connection closed by authenticating user admin
+Feb 24 15:04:21 server1 kernel: [987.65] partition /dev/sda1 is full (100%)
+Feb 24 15:04:27 server1 sshd[5678]: Connection closed by authenticating user admin
+Feb 24 15:04:31 server1 sshd[1234]: Failed password for root from 192.168.1.50
+Feb 24 15:04:34 server1 kernel: [987.65] partition /dev/sda1 is full (100%)
+Feb 24 15:04:37 server1 sshd[5678]: Connection closed by authenticating user admin
+Feb 24 15:04:42 server1 sshd[5678]: Connection closed by authenticating user admin
+Feb 24 15:04:45 server1 sshd[1234]: Failed password for root from 192.168.1.50
+Feb 24 15:04:48 server1 kernel: [123.45] out of memory: kill process
+Feb 24 15:04:51 server1 kernel: [987.65] partition /dev/sda1 is full (100%)
+Feb 24 15:04:58 server1 kernel: [987.65] partition /dev/sda1 is full (100%)
+Feb 24 15:05:02 server1 sshd[1234]: Failed password for root from 192.168.1.50
+Feb 24 15:05:08 server1 kernel: [987.65] partition /dev/sda1 is full (100%)
+Feb 24 15:05:12 server1 kernel: [123.45] out of memory: kill process
+Feb 24 15:05:19 server1 sshd[1234]: Failed password for root from 192.168.1.50
+Feb 24 15:05:22 server1 systemd[1]: apache2.service: Failed with result 'exit-code'.
+Feb 24 15:05:27 server1 sshd[5678]: Connection closed by authenticating user admin
+Feb 24 15:05:34 server1 sshd[5678]: Connection closed by authenticating user admin
+Feb 24 15:05:40 server1 sshd[5678]: Connection closed by authenticating user admin
+Feb 24 15:05:47 server1 sshd[5678]: Connection closed by authenticating user admin
+Feb 24 15:05:51 server1 sshd[5678]: Connection closed by authenticating user admin
+Feb 24 15:05:57 server1 sshd[1234]: Failed password for root from 192.168.1.50
+Feb 24 15:06:04 server1 kernel: [987.65] partition /dev/sda1 is full (100%)
+Feb 24 15:06:08 server1 systemd[1]: apache2.service: Failed with result 'exit-code'.
+Feb 24 15:06:14 server1 sshd[5678]: Connection closed by authenticating user admin
+Feb 24 15:06:17 server1 systemd[1]: apache2.service: Failed with result 'exit-code'.
+Feb 24 15:06:23 server1 sshd[1234]: Failed password for root from 192.168.1.50
+Feb 24 15:06:29 server1 systemd[1]: apache2.service: Failed with result 'exit-code'.
+Feb 24 15:06:32 server1 kernel: [987.65] partition /dev/sda1 is full (100%)
+Feb 24 15:06:37 server1 kernel: [987.65] partition /dev/sda1 is full (100%)
+Feb 24 15:06:44 server1 kernel: [987.65] partition /dev/sda1 is full (100%)
+Feb 24 15:06:51 server1 kernel: [123.45] out of memory: kill process
+Feb 24 15:06:55 server1 systemd[1]: apache2.service: Failed with result 'exit-code'.
+Feb 24 15:07:00 server1 sshd[5678]: Connection closed by authenticating user admin
+Feb 24 15:07:06 server1 kernel: [123.45] out of memory: kill process
+Feb 24 15:07:11 server1 systemd[1]: apache2.service: Failed with result 'exit-code'.
+Feb 24 15:07:18 server1 kernel: [987.65] partition /dev/sda1 is full (100%)
+Feb 24 15:07:25 server1 sshd[5678]: Connection closed by authenticating user admin
+Feb 24 15:07:29 server1 sshd[1234]: Failed password for root from 192.168.1.50
+Feb 24 15:07:32 server1 systemd[1]: apache2.service: Failed with result 'exit-code'.
+Feb 24 15:07:39 server1 sshd[1234]: Failed password for root from 192.168.1.50
+Feb 24 15:07:44 server1 sshd[5678]: Connection closed by authenticating user admin
+Feb 24 15:07:51 server1 kernel: [123.45] out of memory: kill process
+Feb 24 15:07:54 server1 sshd[1234]: Failed password for root from 192.168.1.50
+Feb 24 15:07:57 server1 kernel: [987.65] partition /dev/sda1 is full (100%)
+Feb 24 15:08:00 server1 systemd[1]: apache2.service: Failed with result 'exit-code'.
+Feb 24 15:08:05 server1 kernel: [123.45] out of memory: kill process
+Feb 24 15:08:10 server1 kernel: [987.65] partition /dev/sda1 is full (100%)
+Feb 24 15:08:16 server1 systemd[1]: apache2.service: Failed with result 'exit-code'.
+Feb 24 15:08:21 server1 kernel: [987.65] partition /dev/sda1 is full (100%)
+Feb 24 15:08:28 server1 systemd[1]: apache2.service: Failed with result 'exit-code'.
+Feb 24 15:08:33 server1 sshd[1234]: Failed password for root from 192.168.1.50
+Feb 24 15:08:38 server1 kernel: [123.45] out of memory: kill process
+Feb 24 15:08:44 server1 kernel: [987.65] partition /dev/sda1 is full (100%)
+Feb 24 15:08:51 server1 kernel: [987.65] partition /dev/sda1 is full (100%)
+Feb 24 15:08:54 server1 kernel: [987.65] partition /dev/sda1 is full (100%)
+Feb 24 15:09:00 server1 kernel: [123.45] out of memory: kill process
+Feb 24 15:09:05 server1 kernel: [987.65] partition /dev/sda1 is full (100%)
+Feb 24 15:09:10 server1 sshd[5678]: Connection closed by authenticating user admin
+Feb 24 15:09:13 server1 kernel: [123.45] out of memory: kill process
+Feb 24 15:09:20 server1 systemd[1]: apache2.service: Failed with result 'exit-code'.
+Feb 24 15:09:24 server1 systemd[1]: apache2.service: Failed with result 'exit-code'.
+Feb 24 15:09:31 server1 kernel: [987.65] partition /dev/sda1 is full (100%)
+Feb 24 15:09:37 server1 kernel: [987.65] partition /dev/sda1 is full (100%)
+Feb 24 15:09:41 server1 systemd[1]: apache2.service: Failed with result 'exit-code'.
+Feb 24 15:09:46 server1 sshd[5678]: Connection closed by authenticating user admin
+Feb 24 15:09:53 server1 kernel: [123.45] out of memory: kill process
+Feb 24 15:09:59 server1 systemd[1]: apache2.service: Failed with result 'exit-code'.
+Feb 24 15:10:05 server1 systemd[1]: apache2.service: Failed with result 'exit-code'.
+Feb 24 15:10:10 server1 kernel: [987.65] partition /dev/sda1 is full (100%)
+Feb 24 15:10:16 server1 kernel: [123.45] out of memory: kill process
+Feb 24 15:10:19 server1 systemd[1]: apache2.service: Failed with result 'exit-code'.
+Feb 24 15:10:26 server1 kernel: [987.65] partition /dev/sda1 is full (100%)
+Feb 24 15:10:33 server1 sshd[5678]: Connection closed by authenticating user admin
+Feb 24 15:10:36 server1 sshd[1234]: Failed password for root from 192.168.1.50
+Feb 24 15:10:42 server1 kernel: [123.45] out of memory: kill process
+Feb 24 15:10:45 server1 kernel: [123.45] out of memory: kill process
+Feb 24 15:10:52 server1 sshd[1234]: Failed password for root from 192.168.1.50
+Feb 24 15:10:57 server1 sshd[5678]: Connection closed by authenticating user admin
+Feb 24 15:11:03 server1 sshd[1234]: Failed password for root from 192.168.1.50
+Feb 24 15:11:06 server1 sshd[1234]: Failed password for root from 192.168.1.50
+Feb 24 15:11:12 server1 kernel: [987.65] partition /dev/sda1 is full (100%)
+Feb 24 15:11:18 server1 sshd[5678]: Connection closed by authenticating user admin
+Feb 24 15:11:21 server1 kernel: [987.65] partition /dev/sda1 is full (100%)
+Feb 24 15:11:28 server1 kernel: [123.45] out of memory: kill process
+Feb 24 15:11:32 server1 systemd[1]: apache2.service: Failed with result 'exit-code'.
+Feb 24 15:11:39 server1 sshd[1234]: Failed password for root from 192.168.1.50
+Feb 24 15:11:45 server1 kernel: [123.45] out of memory: kill process
+Feb 24 15:11:49 server1 sshd[5678]: Connection closed by authenticating user admin
+Feb 24 15:11:55 server1 systemd[1]: apache2.service: Failed with result 'exit-code'.
+Feb 24 15:12:00 server1 sshd[5678]: Connection closed by authenticating user admin
+Feb 24 15:12:05 server1 sshd[1234]: Failed password for root from 192.168.1.50
+Feb 24 15:12:11 server1 sshd[1234]: Failed password for root from 192.168.1.50
+Feb 24 15:12:18 server1 kernel: [987.65] partition /dev/sda1 is full (100%)
+Feb 24 15:12:24 server1 sshd[1234]: Failed password for root from 192.168.1.50
+Feb 24 15:12:30 server1 sshd[5678]: Connection closed by authenticating user admin
+Feb 24 15:12:33 server1 kernel: [123.45] out of memory: kill process
+Feb 24 15:12:37 server1 kernel: [987.65] partition /dev/sda1 is full (100%)
+Feb 24 15:12:41 server1 kernel: [123.45] out of memory: kill process
+Feb 24 15:12:48 server1 sshd[5678]: Connection closed by authenticating user admin
+Feb 24 15:12:53 server1 sshd[5678]: Connection closed by authenticating user admin
+Feb 24 15:12:58 server1 kernel: [123.45] out of memory: kill process
+Feb 24 15:13:03 server1 sshd[5678]: Connection closed by authenticating user admin
+Feb 24 15:13:08 server1 kernel: [987.65] partition /dev/sda1 is full (100%)
+Feb 24 15:13:13 server1 sshd[1234]: Failed password for root from 192.168.1.50
+Feb 24 15:13:17 server1 kernel: [987.65] partition /dev/sda1 is full (100%)
+Feb 24 15:13:21 server1 sshd[1234]: Failed password for root from 192.168.1.50
+Feb 24 15:13:24 server1 kernel: [987.65] partition /dev/sda1 is full (100%)
+Feb 24 15:13:27 server1 sshd[1234]: Failed password for root from 192.168.1.50
