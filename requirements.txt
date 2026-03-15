@@ -1,0 +1,8 @@
+fastapi
+uvicorn
+transformers
+torch
+python-dotenv
+python-multipart
+scikit-learn
+drain3

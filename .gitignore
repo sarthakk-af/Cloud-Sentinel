@@ -1,0 +1,24 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+.venv/
+env/
+.env
+
+# Build / IDE
+.vscode/
+.idea/
+dist/
+build/
+node_modules/
+
+# Cloud-Sentinel Data & Logs
+live_system.log
+mock_system.log
+drain3_state.bin
+trace.txt
+*.log
+
+# Transformers / HuggingFace cache
+.cache/
