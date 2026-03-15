@@ -1,8 +1,8 @@
-fastapi
-uvicorn
-transformers
-torch
-python-dotenv
-python-multipart
-scikit-learn
-drain3
+fastapi==0.111.0
+uvicorn[standard]==0.30.1
+transformers==4.41.2
+# torch is installed separately in Dockerfile from the CPU-only index
+python-dotenv==1.0.1
+python-multipart==0.0.9
+scikit-learn==1.4.2
+drain3==0.9.11
