@@ -13,12 +13,17 @@ dist/
 build/
 node_modules/
 
+
 # Cloud-Sentinel Data & Logs
 live_system.log
 mock_system.log
 drain3_state.bin
 trace.txt
 *.log
+
+# Exception: keep the bundled dataset so Mode 4 works on the server
+!datasets/bgl_sample.log
+!datasets/sample_syslog.log
 
 # Transformers / HuggingFace cache
 .cache/

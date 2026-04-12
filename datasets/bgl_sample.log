@@ -1,0 +1,22 @@
+Nov 23 10:14:23 node102 kernel: Connection timeout on interface eth0
+Nov 23 10:14:25 node104 kernel: Connection timeout on interface eth0
+Nov 23 10:14:29 node222 kernel: Connection timeout on interface eth1
+Nov 23 10:15:00 node001 systemd: Started Session 1 of user normal_user.
+Nov 23 10:15:05 node001 systemd: Started Session 2 of user normal_user.
+Nov 23 10:15:10 node001 systemd: Started Session 3 of user normal_user.
+Nov 23 10:15:20 node001 systemd: Started Session 4 of user normal_user.
+Nov 23 10:15:55 node001 systemd: Started Session 5 of user normal_user.
+Nov 23 10:16:12 node001 systemd: Started Session 6 of user normal_user.
+Nov 23 10:17:01 node119 kernel: Critical memory exhaustion detected - threshold 90%
+Nov 23 10:17:15 node119 kernel: Out of memory: Kill process 5678 (java) score 950
+Nov 23 10:17:15 node119 kernel: Out of memory: Kill process 5679 (java) score 950
+Nov 23 10:18:00 node220 sshd[1230]: Failed password for root from 192.168.1.1 port 22 ssh2
+Nov 23 10:18:02 node220 sshd[1231]: Failed password for root from 192.168.1.1 port 22 ssh2
+Nov 23 10:18:05 node220 sshd[1232]: Failed password for root from 192.168.1.1 port 22 ssh2
+Nov 23 10:18:10 node220 sshd[1233]: Failed password for root from 192.168.1.5 port 22 ssh2
+Nov 23 10:19:00 node001 Heartbeat OK
+Nov 23 10:19:05 node002 Heartbeat OK
+Nov 23 10:19:10 node003 Heartbeat OK
+Nov 23 10:19:15 node004 Heartbeat OK
+Nov 23 10:19:20 node005 Heartbeat OK
+Nov 23 10:19:25 node006 Heartbeat OK
