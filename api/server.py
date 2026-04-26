@@ -817,3 +817,29 @@ async def inject_scenario(scenario: str, session_id: str):
         "total_lines": len(logs),
         "session_id": session_id,
     }
+
+
+@app.post("/api/stream/cancel-inject")
+async def cancel_inject(session_id: str):
+    """
+    Cancels an active injection by draining the inject queue.
+    The stream continues with normal chaos logs only.
+    """
+    if session_id not in active_streams:
+        return JSONResponse(status_code=404, content={"error": "Session not found or expired."})
+
+    queue = active_streams[session_id]
+    drained = 0
+    while not queue.empty():
+        try:
+            queue.get_nowait()
+            drained += 1
+        except asyncio.QueueEmpty:
+            break
+
+    logger.info(f"Cancelled injection for session {session_id[:8]} — drained {drained} queued logs")
+    return {
+        "status": "cancelled",
+        "drained_logs": drained,
+        "session_id": session_id,
+    }
