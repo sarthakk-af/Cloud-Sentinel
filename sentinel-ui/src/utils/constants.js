@@ -27,4 +27,6 @@ export const CRITICAL_KWS = [
   'denied', 'timeout', 'exception', 'kill', 'oom',
 ];
 
-export const API = '/api';
+export const API = window.location.hostname === 'localhost' 
+    ? 'http://127.0.0.1:8000' 
+    : '';
