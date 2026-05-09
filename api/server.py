@@ -37,7 +37,6 @@ USE_AI = os.getenv("USE_AI", "True").lower() == "true"
 MODEL_NAME = os.getenv("MODEL_NAME", "t5-small")
 DATA_DIR = os.getenv("DATA_DIR", "data")
 DATASETS_DIR = os.getenv("DATASETS_DIR", "datasets")
-LOG_MAX_BYTES = int(os.getenv("LOG_MAX_BYTES", 5 * 1024 * 1024))  # default 5 MB
 MAX_CONCURRENT_STREAMS = int(os.getenv("MAX_CONCURRENT_STREAMS", 5))
 
 # CORS: use env var for production, wildcard for dev
@@ -331,21 +330,6 @@ INCIDENT_SCENARIOS = {
 
 
 # ── Helpers ─────────────────────────────────────────────────────────────────
-
-def _rotate_log_if_needed(log_file: str):
-    """Truncate live_system.log if it exceeds LOG_MAX_BYTES to avoid unbounded growth."""
-    try:
-        if os.path.exists(log_file) and os.path.getsize(log_file) > LOG_MAX_BYTES:
-            logger.info(f"Log rotation triggered: {log_file} exceeds {LOG_MAX_BYTES} bytes.")
-            with open(log_file, "rb") as f:
-                f.seek(-int(LOG_MAX_BYTES * 0.2), 2)
-                tail = f.read()
-            with open(log_file, "wb") as f:
-                f.write(tail)
-            logger.info("Log rotation complete.")
-    except Exception as e:
-        logger.warning(f"Log rotation failed: {e}")
-
 
 def calculate_system_health(clusters):
     """

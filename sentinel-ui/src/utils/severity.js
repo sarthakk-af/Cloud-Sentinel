@@ -17,16 +17,7 @@ export function getStatusMapping(status = 'Nominal') {
   return { color: '#00ff94', glow: 'rgba(0,255,148,0.06)', label: 'NOMINAL', panelClass: 'severity-nominal' };
 }
 
-export function getSeverity(summary = '') {
-  const s = summary.toLowerCase();
-  if (s.includes('critical') || s.includes('security') || s.includes('threat'))
-    return getStatusMapping('critical');
-  if (s.includes('performance') || s.includes('warning') || s.includes('storage') || s.includes('network'))
-    return getStatusMapping('warning');
-  if (s.includes('database') || s.includes('web server'))
-    return getStatusMapping('degraded');
-  return getStatusMapping('nominal');
-}
+
 
 /* ── Terminal line classifier ──────────────────────────────────── */
 export function getTerminalClass(line) {

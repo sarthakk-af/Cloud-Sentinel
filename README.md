@@ -23,7 +23,7 @@
 - **Backend** — FastAPI (Python 3.10+), Uvicorn
 - **AI/ML** — HuggingFace Transformers (T5), Scikit-Learn (TF-IDF), Drain3
 - **Frontend** — React 19 + Vite, Recharts, Axios
-- **Deployment** — Docker, GitHub Actions → EC2
+- **Deployment** — Nginx Reverse Proxy, Conda, EC2
 
 ---
 
@@ -62,15 +62,6 @@ npm run dev
 
 UI will be available at **http://localhost:5173**
 
-### 4. (Optional) Live log generator
-
-Open a separate terminal and run:
-```bash
-python scripts/advanced_generator.py
-```
-
-This continuously writes realistic multi-service logs (Nginx, Postgres, Auth, App) to `data/live_system.log` for the Live Stream tab.
-
 ---
 
 ## ⚙️ Configuration (`.env`)
@@ -81,35 +72,47 @@ This continuously writes realistic multi-service logs (Nginx, Postgres, Auth, Ap
 | `USE_AI` | `True` | Enable/disable T5 transformer |
 | `MODEL_NAME` | `t5-small` | HuggingFace model name (e.g. `t5-base`) |
 | `DATA_DIR` | `data` | Directory for state files and logs |
-| `LOG_MAX_BYTES` | `5242880` | Max size of live_system.log before auto-rotation (5 MB) |
 | `CORS_ORIGINS` | *(empty = allow all)* | Comma-separated allowed origins for production |
 | `VITE_API_URL` | `http://127.0.0.1:8000` | Backend URL for the frontend |
 
 ---
 
-## 🐳 Docker
+## 🚀 Deployment
 
+Cloud-Sentinel is designed to be lightweight and can be deployed without heavy containerization engines like Docker. 
+
+### Standard Production Setup (Nginx + Uvicorn)
+For a standard deployment on a VPS or cloud instance:
+1. **Frontend:** Build the React application (`cd sentinel-ui && npm run build`) and serve the `dist` folder using Nginx as a static file server.
+2. **Backend:** Run the FastAPI application using `uvicorn` and configure Nginx as a reverse proxy to route `/api/*` requests to the Uvicorn port.
+
+### Special Case: Low-Resource Environments (e.g., 2GB RAM EC2)
+If you are deploying to a resource-constrained server where running Node.js build scripts or heavy installations might trigger Out-Of-Memory (OOM) kills, use this manual deployment strategy:
+
+**1. Transfer the Frontend:**
+Build the frontend on your local development machine, then securely copy the compiled `dist` directory to your server.
 ```bash
-# Build & run
-docker build -t cloud-sentinel .
-docker run -d -p 8000:8000 --env-file .env cloud-sentinel
+# On your local machine
+cd sentinel-ui && npm run build
+scp -r dist/ user@your-server-ip:~/Cloud-Sentinel/sentinel-ui/dist
 ```
 
----
+**2. Setup a Conda Environment (Server):**
+SSH into your server and use Conda to manage an isolated Python environment. To save disk space and RAM, install the **CPU-only** version of PyTorch.
+```bash
+conda create -n sentinel python=3.10 -y
+conda activate sentinel
 
-## 🚀 Deploy to EC2
+# Install CPU-ONLY PyTorch to prevent massive CUDA binaries from downloading
+pip install torch==2.3.1+cpu --extra-index-url https://download.pytorch.org/whl/cpu
+pip install -r requirements.txt
+```
 
-The included **GitHub Actions** workflow (`.github/workflows/deploy.yml`) automatically deploys to an EC2 instance on every push to `master`.
-
-**Required GitHub Secrets:**
-
-| Secret | Description |
-|--------|-------------|
-| `EC2_HOST` | Public IP or hostname of the EC2 instance |
-| `EC2_USER` | SSH user (e.g. `ubuntu` or `ec2-user`) |
-| `EC2_KEY` | Private SSH key for authentication |
-
-The deploy script SSHs into the instance, pulls the latest code, rebuilds the Docker image, and restarts the container.
+**3. Run the Backend:**
+Run the application using Uvicorn. You can then point your Nginx reverse proxy to this local port.
+```bash
+uvicorn api.server:app --host 127.0.0.1 --port 8000
+```
 
 ---
 
@@ -123,9 +126,6 @@ cloud-sentinel/
 │   ├── parser.py           # Phase A: Drain3 log template miner
 │   ├── analyzer.py         # Phase B: TF-IDF anomaly ranker
 │   └── summarizer.py       # Phase C: T5 transformer summarizer
-├── scripts/
-│   ├── advanced_generator.py  # Multi-service realistic log generator
-│   └── log_generator.py       # Simple syslog-format generator
 ├── datasets/
 │   ├── bgl_sample.log         # BGL supercomputer log dataset
 │   └── replay_loader.py       # Dataset replay utility
@@ -138,8 +138,7 @@ cloud-sentinel/
 │   └── test_analyzer.py
 ├── data/                      # Runtime state files (gitignored)
 ├── .env                       # Environment configuration
-├── requirements.txt
-└── Dockerfile
+└── requirements.txt
 ```
 
 ---
