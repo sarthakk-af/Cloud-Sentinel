@@ -1,15 +1,31 @@
 import { CRITICAL_KWS } from './constants';
 
 /* ── Severity classification ───────────────────────────────────── */
+export function getStatusMapping(status = 'Nominal') {
+  const s = status.toLowerCase();
+  
+  if (s === 'critical') {
+    return { color: '#ff3a5c', glow: 'rgba(255,58,92,0.06)', label: 'CRITICAL', panelClass: 'severity-critical' };
+  }
+  if (s === 'warning') {
+    return { color: '#ffb830', glow: 'rgba(255,184,48,0.06)', label: 'WARNING', panelClass: 'severity-warning' };
+  }
+  if (s === 'degraded') {
+    return { color: '#b266ff', glow: 'rgba(178,102,255,0.06)', label: 'DEGRADED', panelClass: 'severity-degraded' };
+  }
+  
+  return { color: '#00ff94', glow: 'rgba(0,255,148,0.06)', label: 'NOMINAL', panelClass: 'severity-nominal' };
+}
+
 export function getSeverity(summary = '') {
   const s = summary.toLowerCase();
-  if (s.startsWith('critical') || s.startsWith('security'))
-    return { color: '#ff3a5c', glow: 'rgba(255,58,92,0.06)', label: 'CRITICAL', panelClass: 'severity-critical' };
-  if (s.startsWith('performance') || s.startsWith('warning') || s.startsWith('storage') || s.startsWith('network'))
-    return { color: '#ffb830', glow: 'rgba(255,184,48,0.06)', label: 'WARNING', panelClass: 'severity-warning' };
-  if (s.startsWith('database') || s.startsWith('web server'))
-    return { color: '#b266ff', glow: 'rgba(178,102,255,0.06)', label: 'DEGRADED', panelClass: 'severity-degraded' };
-  return { color: '#00ff94', glow: 'rgba(0,255,148,0.06)', label: 'NOMINAL', panelClass: 'severity-nominal' };
+  if (s.includes('critical') || s.includes('security') || s.includes('threat'))
+    return getStatusMapping('critical');
+  if (s.includes('performance') || s.includes('warning') || s.includes('storage') || s.includes('network'))
+    return getStatusMapping('warning');
+  if (s.includes('database') || s.includes('web server'))
+    return getStatusMapping('degraded');
+  return getStatusMapping('nominal');
 }
 
 /* ── Terminal line classifier ──────────────────────────────────── */

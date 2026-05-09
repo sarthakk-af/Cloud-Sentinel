@@ -1,21 +1,25 @@
 import { Progress, Tooltip } from '@mantine/core';
-import { getSeverity } from '../../utils/severity';
+import { AlertTriangle, ShieldCheck, ShieldAlert, ShieldX, Activity } from 'lucide-react';
+import { getStatusMapping } from '../../utils/severity';
 
-const CONFIGS = {
-  CRITICAL: { score: 88, text: 'Critical Threat',  pulse: true },
-  WARNING:  { score: 62, text: 'Warning Detected', pulse: false },
-  DEGRADED: { score: 40, text: 'Degraded State',   pulse: false },
-  NOMINAL:  { score: 15, text: 'System Nominal',   pulse: false },
+const STATUS_ICONS = {
+  CRITICAL: ShieldX,
+  WARNING:  ShieldAlert,
+  DEGRADED: AlertTriangle,
+  NOMINAL:  ShieldCheck,
 };
 
-const RANK_COLORS = ['var(--red)', 'var(--amber)', 'var(--cyan)'];
+function GaugeArc({ status, score }) {
+  const sev = getStatusMapping(status || 'Nominal');
+  const Icon = STATUS_ICONS[sev.label] || ShieldCheck;
+  const pulse = sev.label === 'CRITICAL';
+  
+  const displayScore = score !== undefined ? score : 15;
+  const displayText = status ? `System ${status}` : 'System Nominal';
 
-function GaugeArc({ summary }) {
-  const sev = getSeverity(summary);
-  const cfg = CONFIGS[sev.label] || CONFIGS.NOMINAL;
-  const R = 52, CX = 70, CY = 72;
+  const R = 62, CX = 80, CY = 82;
   const START = 135, SWEEP = 270;
-  const fillEnd = START + (cfg.score / 100) * SWEEP;
+  const fillEnd = START + (displayScore / 100) * SWEEP;
 
   const pt = deg => {
     const r = (deg * Math.PI) / 180;
@@ -27,69 +31,81 @@ function GaugeArc({ summary }) {
   };
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 4 }}>
-      <svg width="140" height="118" viewBox="0 0 140 128">
-        <path d={arc(START, START + SWEEP)} fill="none" stroke="rgba(255,255,255,0.06)" strokeWidth="10" strokeLinecap="round" />
+    <div className="gauge-container">
+      <svg width="160" height="135" viewBox="0 0 160 145">
+        <path d={arc(START, START + SWEEP)} fill="none" stroke="rgba(255,255,255,0.06)" strokeWidth="12" strokeLinecap="round" />
         <path
           d={arc(START, fillEnd)}
           fill="none"
           stroke={sev.color}
-          strokeWidth="10"
+          strokeWidth="12"
           strokeLinecap="round"
           style={{
-            filter: `drop-shadow(0 0 8px ${sev.color}88)`,
-            transition: 'all 1s ease',
-            ...(cfg.pulse ? { animation: 'pulse-glow 2s ease infinite' } : {}),
+            filter: `drop-shadow(0 0 12px ${sev.color}88)`,
+            transition: 'all 1.2s cubic-bezier(0.23, 1, 0.32, 1)',
+            ...(pulse ? { animation: 'pulse-glow 2s ease infinite' } : {}),
           }}
         />
-        <text x={CX} y={CY + 6} textAnchor="middle" fill={sev.color} fontSize="24" fontWeight="800"
+        <text x={CX} y={CY + 4} textAnchor="middle" fill={sev.color} fontSize="28" fontWeight="800"
           fontFamily="'Inter', sans-serif"
-          style={{ filter: `drop-shadow(0 0 10px ${sev.color}60)` }}
+          style={{ filter: `drop-shadow(0 0 14px ${sev.color}60)` }}
         >
-          {cfg.score}
+          {displayScore}
         </text>
         <text x={CX} y={CY + 22} textAnchor="middle" fill="var(--text-dim)" fontSize="8"
-          fontFamily="'Inter', sans-serif" letterSpacing="0.08em"
+          fontFamily="'Inter', sans-serif" letterSpacing="0.1em"
         >
           THREAT LEVEL
         </text>
       </svg>
-      <div style={{
-        color: sev.color,
-        fontWeight: 700,
-        fontSize: '0.72rem',
-        ...(cfg.pulse ? { animation: 'pulse-glow 2s ease infinite' } : {}),
-      }}>
-        {cfg.text}
+
+      <div
+        className="gauge-status-badge"
+        style={{
+          color: sev.color,
+          borderColor: `${sev.color}44`,
+          background: `${sev.color}10`,
+          ...(pulse ? { animation: 'pulse-glow 2s ease infinite' } : {}),
+        }}
+      >
+        <Icon size={12} />
+        {displayText}
       </div>
     </div>
   );
 }
 
-export default function HealthGauge({ summary, clusters }) {
+const RANK_COLORS = ['var(--red)', 'var(--amber)', 'var(--cyan)'];
+
+export default function HealthGauge({ status, score, clusters }) {
   if (!clusters?.length) return null;
 
   return (
-    <div className="card" style={{ marginBottom: 12, animation: 'fadeUp 0.45s ease forwards', animationDelay: '0.1s', opacity: 0 }}>
-      <div className="card-header">
-        <span className="card-title">Anomaly Overview</span>
+    <div className="card gauge-card" style={{ animation: 'fadeUp 0.45s ease forwards', animationDelay: '0.1s', opacity: 0 }}>
+      <div className="card-header" style={{ marginBottom: 8 }}>
+        <Activity size={16} style={{ color: 'var(--cyan)' }} />
+        <span className="card-title">Sentinel State</span>
       </div>
 
-      <div style={{ display: 'flex', gap: 24, alignItems: 'center', flexWrap: 'wrap', minHeight: 110 }}>
-        {/* Gauge */}
-        <div style={{ flex: '0 0 150px', display: 'flex', justifyContent: 'center' }}>
-          <GaugeArc summary={summary} />
+      <div className="gauge-layout">
+        <div className="gauge-arc-wrapper">
+          <GaugeArc status={status} score={score} />
         </div>
 
-        {/* Divider */}
-        <div style={{ width: 1, background: 'var(--border)', alignSelf: 'stretch', minHeight: 80 }} />
+        <div className="gauge-divider" />
 
-        {/* Threat breakdown */}
-        <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 8 }}>
-          <div className="card-label" style={{ marginBottom: 2 }}>Top Threat Clusters</div>
+        <div className="gauge-breakdown">
+          <div className="card-label" style={{ marginBottom: 6 }}>Top Threat Clusters</div>
           {clusters.slice(0, 3).map((c, i) => {
             const max = clusters[0].importance_score || 1;
             const pct = Math.min(100, ((c.importance_score || 0) / max) * 100);
+            
+            // Fix: Use actual cluster severity for color, not rank
+            const score = c.importance_score || 0;
+            let barColor = 'var(--cyan)'; // Nominal
+            if (score >= 0.9) barColor = 'var(--red)';
+            else if (score >= 0.4) barColor = 'var(--amber)';
+
             return (
               <Tooltip
                 key={i}
@@ -99,31 +115,23 @@ export default function HealthGauge({ summary, clusters }) {
                 multiline
                 maw={350}
               >
-                <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-                  <span style={{
-                    color: RANK_COLORS[i],
-                    fontSize: '0.72rem',
-                    fontWeight: 700,
-                    width: 22,
-                    flexShrink: 0,
-                  }}>
+                <div className="gauge-threat-row">
+                  <span className="gauge-rank" style={{ color: barColor, opacity: 0.8 }}>
                     #{i + 1}
                   </span>
                   <Progress
                     value={pct}
-                    color={RANK_COLORS[i]}
-                    size={4}
+                    color={barColor}
+                    size={5}
                     radius={4}
-                    style={{ flex: 1, transition: 'width 0.8s ease' }}
+                    style={{ 
+                      flex: 1, 
+                      transition: 'width 1s ease',
+                      filter: score >= 0.9 ? 'drop-shadow(0 0 4px var(--red))' : 'none'
+                    }}
                   />
-                  <span style={{
-                    color: 'var(--text-dim)',
-                    fontSize: '0.68rem',
-                    fontFamily: 'var(--font-mono)',
-                    width: 44,
-                    textAlign: 'right',
-                  }}>
-                    {(c.importance_score || 0).toFixed(3)}
+                  <span className="gauge-score" style={{ color: barColor }}>
+                    {score.toFixed(3)}
                   </span>
                 </div>
               </Tooltip>

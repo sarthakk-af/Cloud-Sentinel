@@ -1,8 +1,27 @@
-import { SimpleGrid, Loader } from '@mantine/core';
+import { SimpleGrid } from '@mantine/core';
 import { notifications } from '@mantine/notifications';
 import axios from 'axios';
 import * as Icons from 'lucide-react';
 import { SCENARIOS, API } from '../../utils/constants';
+import ScanningBeam from '../effects/ScanningBeam';
+
+const SEVERITY_COLORS = {
+  ssh_brute:    'var(--red)',
+  java_oom:     'var(--red)',
+  kernel_panic: 'var(--red)',
+  disk_full:    'var(--amber)',
+  db_deadlock:  'var(--amber)',
+  cpu_spike:    'var(--amber)',
+  http_flood:   'var(--violet)',
+  ssl_cert:     'var(--violet)',
+  mixed_noise:  'var(--cyan)',
+};
+
+const SEVERITY_LABELS = {
+  ssh_brute: 'CRITICAL', java_oom: 'CRITICAL', kernel_panic: 'CRITICAL',
+  disk_full: 'WARNING', db_deadlock: 'WARNING', cpu_spike: 'WARNING',
+  http_flood: 'DEGRADED', ssl_cert: 'DEGRADED', mixed_noise: 'LOW',
+};
 
 export default function DemoScenariosTab({
   onResults, analyzing, setAnalyzing, activeScenario, setActiveScenario,
@@ -25,42 +44,57 @@ export default function DemoScenariosTab({
     <div className="card" style={{ animation: 'fadeUp 0.4s ease forwards' }}>
       <div className="card-header" style={{ justifyContent: 'space-between' }}>
         <span className="card-title">Threat Scenario Library</span>
-        <span style={{
-          padding: '3px 10px', borderRadius: 20, fontSize: '0.68rem', fontWeight: 600,
-          color: 'var(--cyan)', background: 'var(--cyan-dim)', border: '1px solid var(--border-active)',
-          fontFamily: 'var(--font-mono)',
-        }}>
-          {SCENARIOS.length} loaded
+        <span className="library-count-badge">
+          {SCENARIOS.length} patterns loaded
         </span>
       </div>
 
-      <p style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', marginBottom: 20 }}>
-        Select a scenario to run the AI analysis pipeline.
+      <p className="library-subtitle">
+        Select a scenario to run the full AI analysis pipeline against pre-crafted attack patterns.
       </p>
 
       <SimpleGrid cols={{ base: 1, xs: 2, sm: 3 }} spacing="sm">
         {SCENARIOS.map((s, i) => {
           const isActive = activeScenario === s.key;
           const Icon = Icons[s.icon] || Icons.AlertTriangle;
+          const accentColor = SEVERITY_COLORS[s.key] || 'var(--cyan)';
+          const sevLabel = SEVERITY_LABELS[s.key] || 'INFO';
+
           return (
             <div
               key={s.key}
               id={`demo-${s.key}`}
-              className={`scenario-card${isActive ? ' active' : ''}`}
+              className={`threat-card${isActive ? ' active' : ''}`}
               onClick={() => handleDemo(s.key)}
-              style={{ animationDelay: `${i * 0.05}s` }}
+              style={{ animationDelay: `${i * 0.05}s`, '--accent': accentColor }}
             >
-              <div className="scenario-card-icon"><Icon size={28} /></div>
-              <div className="scenario-card-name">{s.name}</div>
-              <div className="scenario-card-desc">{s.desc}</div>
+              {/* Severity indicator stripe */}
+              <div className="threat-card-stripe" style={{ background: accentColor }} />
+
+              {/* Icon */}
+              <div className="threat-card-icon" style={{ color: accentColor, background: `${accentColor}12`, borderColor: `${accentColor}33` }}>
+                <Icon size={22} />
+              </div>
+
+              {/* Content */}
+              <div className="threat-card-name">{s.name}</div>
+              <div className="threat-card-desc">{s.desc}</div>
+
+              {/* Severity tag */}
+              <div className="threat-card-tag" style={{ color: accentColor, borderColor: `${accentColor}33`, background: `${accentColor}08` }}>
+                {sevLabel}
+              </div>
+
+              {/* Active glow overlay */}
+              {isActive && <div className="threat-card-active-overlay" style={{ borderColor: accentColor }} />}
             </div>
           );
         })}
       </SimpleGrid>
 
       {analyzing && (
-        <div style={{ display: 'flex', justifyContent: 'center', marginTop: 16 }}>
-          <Loader color="var(--cyan)" size="sm" type="dots" />
+        <div style={{ marginTop: 16 }}>
+          <ScanningBeam label="Running threat analysis…" />
         </div>
       )}
     </div>

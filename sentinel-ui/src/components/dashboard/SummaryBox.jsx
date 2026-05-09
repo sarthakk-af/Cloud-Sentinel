@@ -1,7 +1,7 @@
-import { getSeverity } from '../../utils/severity';
+import { getStatusMapping } from '../../utils/severity';
 
-export default function SummaryBox({ summary }) {
-  const sev = getSeverity(summary);
+export default function SummaryBox({ summary, status }) {
+  const sev = getStatusMapping(status || 'Nominal');
 
   return (
     <div
@@ -20,10 +20,11 @@ export default function SummaryBox({ summary }) {
           color: sev.color,
           letterSpacing: '-0.01em',
         }}>
-          {sev.label === 'CRITICAL' && 'Critical Threat'}
-          {sev.label === 'WARNING' && 'Warning'}
-          {sev.label === 'DEGRADED' && 'Degraded'}
-          {sev.label === 'NOMINAL' && 'System Nominal'}
+          {status === 'Critical' && 'Critical Threat Detected'}
+          {status === 'Warning' && 'System Alert Issued'}
+          {status === 'Degraded' && 'System Performance Degraded'}
+          {status === 'Nominal' && 'System Nominal'}
+          {!['Critical', 'Warning', 'Degraded', 'Nominal'].includes(status) && `System ${status || 'Stable'}`}
         </span>
         <span style={{
           padding: '2px 10px',
@@ -33,8 +34,9 @@ export default function SummaryBox({ summary }) {
           fontSize: '0.62rem',
           fontWeight: 700,
           color: sev.color,
+          textTransform: 'uppercase'
         }}>
-          {sev.label}
+          {status || 'NOMINAL'}
         </span>
       </div>
 
@@ -45,7 +47,7 @@ export default function SummaryBox({ summary }) {
         lineHeight: 1.7,
         color: 'var(--text-primary)',
       }}>
-        {summary || 'System is stable. No critical anomalies detected.'}
+        {summary || 'Analysis complete. System is performing within expected parameters.'}
       </p>
     </div>
   );

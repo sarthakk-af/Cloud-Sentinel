@@ -12,9 +12,6 @@ class LogAnalyzer:
         # Stop words filter out common english words (the, is, at, which, on)
         self.vectorizer = TfidfVectorizer(stop_words='english')
         
-        # We also define some domain-specific keywords that we ALWAYS want to prioritize
-        self.critical_keywords = ['error', 'fail', 'failed', 'critical', 'panic', 'denied', 'timeout', 'exception', 'kill', 'oom']
-        
     def analyze_templates(self, templates: list) -> list:
         """
         Takes a list of dictionaries: [{"id": 1, "template": "Failed password..."}, ...]
@@ -44,16 +41,29 @@ class LogAnalyzer:
         feature_names = self.vectorizer.get_feature_names_out()
         
         for idx, t in enumerate(templates):
-            base_score: float = float(doc_scores[idx])
+            # Scale down base score so it provides nuance, but doesn't override the tiers
+            base_score = float(doc_scores[idx]) * 0.3
             
-            # Boost score if the template contains known critical keywords
-            kw_boost = 0.0
+            # Tiered Keyword Boosters
+            # 1. Emergency (Red/Critical): System is dying or breached
+            emergencies = ['panic', 'kill', 'oom', 'denied', 'brute', 'failed password']
+            # 2. Alerts (Amber/Warning): Hardware/Resource failures
+            alerts = ['timeout', 'deadlock', 'full', 'fatal']
+            # 3. Performance (Violet/Degraded): Application/Web errors
+            perf = ['error', 'fail', 'failed', '500', '502', '503', 'storm', 'ssl', 'expired', 'spike', 'refused']
+
             template_lower = str(t.get("template", "")).lower()
-            for kw in self.critical_keywords:
-                if kw in template_lower:
-                    kw_boost = kw_boost + 0.5  # type: ignore
+            tier_score = 0.0
             
-            t["importance_score"] = float(base_score) + float(kw_boost)
+            # Use max() instead of += to prevent multiple minor keywords from triggering a Critical state
+            for kw in perf:
+                if kw in template_lower: tier_score = max(tier_score, 0.4)
+            for kw in alerts:
+                if kw in template_lower: tier_score = max(tier_score, 0.8)
+            for kw in emergencies:
+                if kw in template_lower: tier_score = max(tier_score, 1.5)
+            
+            t["importance_score"] = base_score + tier_score
             
         # Sort templates by highest importance score first
         ranked_templates = sorted(templates, key=lambda x: x["importance_score"], reverse=True)

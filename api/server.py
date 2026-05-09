@@ -81,6 +81,8 @@ except Exception as e:
 # In-memory storage for the latest analysis (used by upload mode)
 latest_analysis = {
     "status": "idle",
+    "system_status": "Nominal",
+    "threat_score": 0,
     "total_logs": 0,
     "unique_templates": 0,
     "top_clusters": [],
@@ -345,11 +347,41 @@ def _rotate_log_if_needed(log_file: str):
         logger.warning(f"Log rotation failed: {e}")
 
 
+def calculate_system_health(clusters):
+    """
+    Determines global system health based on the highest ranked threat clusters.
+    Mistakes like 'Nominal' showing when 'Critical' issues exist are prevented
+    by using a peak-severity priority model.
+    """
+    if not clusters:
+        return "Nominal", 0
+    
+    # Peak score analysis
+    peak_score = max(c.get("importance_score", 0) for c in clusters)
+    
+    # Dynamic threat score (scaled 0-100)
+    threat_level = min(100, int(peak_score * 50))
+    
+    # Tiered Thresholds strictly bounded to match analyzer.py
+    # 1.4+ -> Critical (Emergency keywords: 1.5 tier)
+    # 0.7+ -> Warning (Alert keywords: 0.8 tier)
+    # 0.35+ -> Degraded (Perf keywords: 0.4 tier)
+    # <0.35 -> Nominal (No keywords: 0.0 tier)
+    
+    if peak_score >= 1.4:
+        return "Critical", threat_level
+    elif peak_score >= 0.7:
+        return "Warning", threat_level
+    elif peak_score >= 0.35:
+        return "Degraded", threat_level
+    else:
+        return "Nominal", threat_level
+
+
 async def _run_ai_pipeline(stream_parser: LogParser, lines: list):
     """
     Feeds new log lines into the session parser and runs the full AI pipeline.
-    The T5 summarizer is CPU-bound, so we offload it to a thread pool executor
-    to avoid blocking the asyncio event loop.
+    Includes global health calculation to ensure backend-driven status reporting.
     """
     loop = asyncio.get_running_loop()
 
@@ -360,13 +392,16 @@ async def _run_ai_pipeline(stream_parser: LogParser, lines: list):
     ranked_templates = analyzer.analyze_templates(unique_templates)
     top_5 = ranked_templates[:5]
 
+    # Calculate global health based on current cluster state
+    status, score = calculate_system_health(top_5)
+
     # Offload blocking T5 call to thread pool
     summary = await loop.run_in_executor(
         _thread_pool,
         summarizer.summarize,
         top_5[:2]
     )
-    return unique_templates, ranked_templates, top_5, summary
+    return unique_templates, ranked_templates, top_5, summary, status, score
 
 
 # ── API Endpoints ────────────────────────────────────────────────────────────
@@ -428,9 +463,14 @@ def replay_dataset():
     ranked_templates = analyzer.analyze_templates(unique_templates)
     top_5 = ranked_templates[:5]
     summary = summarizer.summarize(top_5[:2])
+    
+    # Calculate health for replay
+    sys_status, sys_score = calculate_system_health(top_5)
 
     return {
         "status": "complete",
+        "system_status": sys_status,
+        "threat_score": sys_score,
         "dataset": os.path.basename(dataset_file),
         "total_logs": len(lines_parsed),
         "unique_templates": len(unique_templates),
@@ -458,18 +498,12 @@ async def run_analysis_pipeline(text: str):
             os.remove(stale)
         fresh_parser = LogParser(persistence_path=stale)
 
-        for line in log_lines:
-            fresh_parser.parse_log(line)
+        unique_templates, ranked_templates, top_5, summary, sys_status, sys_score = await _run_ai_pipeline(fresh_parser, log_lines)
 
-        unique_templates = fresh_parser.get_all_templates()
         latest_analysis["unique_templates"] = len(unique_templates)
-
-        ranked_templates = analyzer.analyze_templates(unique_templates)
-        top_5 = ranked_templates[:5]
         latest_analysis["top_clusters"] = top_5
-
-        loop = asyncio.get_running_loop()
-        summary = await loop.run_in_executor(_thread_pool, summarizer.summarize, top_5[:2])
+        latest_analysis["system_status"] = sys_status
+        latest_analysis["threat_score"] = sys_score
         latest_analysis["ai_summary"] = summary
 
         latest_analysis["processing_time_ms"] = round((time.time() - start_time) * 1000)
@@ -477,6 +511,7 @@ async def run_analysis_pipeline(text: str):
     except Exception as e:
         print(f"Error in background pipeline: {e}")
         latest_analysis["status"] = "error"
+        latest_analysis["system_status"] = "Unknown"
 
 
 @app.post("/api/analyze")
@@ -519,7 +554,7 @@ async def test_sse():
 
 
 @app.get("/api/library/{scenario}")
-def load_library_scenario(scenario: str):
+async def load_library_scenario(scenario: str):
     """Loads a predefined log scenario for quick demo testing without files."""
     scenarios = {
         "ssh_brute": [
@@ -537,9 +572,10 @@ def load_library_scenario(scenario: str):
         "mixed_noise": [
             "Heartbeat OK from node 10.0.0.5",
             "systemd: Started Session 1 of user normal_user.",
-            "kernel: Out of memory: Kill process 1234 (python)",
+            "rsyslogd: log rotation complete for /var/log/nginx/access.log",
             "Heartbeat OK from node 10.0.0.6",
-            "systemd: Started Session 2 of user normal_user."
+            "systemd: Started Session 2 of user normal_user.",
+            "cron: (root) CMD ( /usr/bin/backup.sh > /dev/null 2>&1)"
         ],
         "disk_full": [
             "kernel: EXT4-fs error (device sda1): ext4_find_entry: No space left on device",
@@ -565,8 +601,8 @@ def load_library_scenario(scenario: str):
             '114.12.55.90 - - [15/Mar/2026:13:00:04 +0000] "POST /api/v1/login HTTP/1.1" 500 512 "-" "Mozilla/5.0"',
             '192.168.1.10 - - [15/Mar/2026:13:00:05 +0000] "GET /health HTTP/1.1" 500 512 "-" "Mozilla/5.0"',
             '10.0.0.5 - - [15/Mar/2026:13:00:06 +0000] "DELETE /api/v1/data HTTP/1.1" 500 512 "-" "Mozilla/5.0"',
-            "Heartbeat OK from node 10.0.0.5",
-            "Heartbeat OK from node 10.0.0.6"
+            'nginx: [error] *1234 upstream internal server error storm detected',
+            'nginx: [crit] *1235 500 Internal Server Error spike'
         ],
         "ssl_cert": [
             "nginx: SSL_CTX_use_certificate_file: error:0906D06C:PEM routines: no start line",
@@ -607,18 +643,14 @@ def load_library_scenario(scenario: str):
         os.remove(stale)
     fresh_parser = LogParser(persistence_path=stale)
 
-    for line in log_lines:
-        fresh_parser.parse_log(line)
-
-    unique_templates = fresh_parser.get_all_templates()
-    ranked_templates = analyzer.analyze_templates(unique_templates)
-    top_5 = ranked_templates[:5]
-    summary = summarizer.summarize(top_5[:2])
+    unique_templates, ranked_templates, top_5, summary, sys_status, sys_score = await _run_ai_pipeline(fresh_parser, log_lines)
 
     end_time = time.time()
 
     return {
         "status": "complete",
+        "system_status": sys_status,
+        "threat_score": sys_score,
         "total_logs": len(log_lines),
         "unique_templates": len(unique_templates),
         "top_clusters": top_5,
@@ -727,13 +759,15 @@ async def log_stream():
                 if should_emit:
                     chunk_start = time.time()
                     try:
-                        unique_templates, ranked_templates, top_5, summary = await _run_ai_pipeline(
+                        unique_templates, ranked_templates, top_5, summary, sys_status, sys_score = await _run_ai_pipeline(
                             stream_parser, accumulated_lines
                         )
 
                         payload = {
                             "type": "analysis",
                             "status": "live",
+                            "system_status": sys_status,
+                            "threat_score": sys_score,
                             "new_logs_chunk": len(accumulated_lines),
                             "total_logs": len(accumulated_lines),
                             "unique_templates": len(unique_templates),

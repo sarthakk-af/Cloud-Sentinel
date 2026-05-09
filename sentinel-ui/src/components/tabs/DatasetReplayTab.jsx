@@ -1,8 +1,9 @@
-import { SimpleGrid, Loader } from '@mantine/core';
+import { SimpleGrid } from '@mantine/core';
 import { notifications } from '@mantine/notifications';
 import { Play } from 'lucide-react';
 import axios from 'axios';
 import { API } from '../../utils/constants';
+import ScanningBeam from '../effects/ScanningBeam';
 
 const REPLAY_INFO = [
   { label: 'Dataset', value: 'sample_syslog.log' },
@@ -47,10 +48,11 @@ export default function DatasetReplayTab({ onResults, analyzing, setAnalyzing })
         </SimpleGrid>
       </div>
 
-      <div style={{ display: 'flex', justifyContent: 'center' }}>
+      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 8 }}>
         <button id="run-replay-btn" className="btn btn-primary" onClick={handleReplay} disabled={analyzing}>
-          {analyzing ? ( <><Loader size={14} color="var(--cyan)" /> Replaying…</> ) : ( <><Play size={15} /> Start Replay</> )}
+          {analyzing ? 'Replaying…' : ( <><Play size={15} /> Start Replay</> )}
         </button>
+        {analyzing && <ScanningBeam label="Replaying dataset…" />}
       </div>
     </div>
   );

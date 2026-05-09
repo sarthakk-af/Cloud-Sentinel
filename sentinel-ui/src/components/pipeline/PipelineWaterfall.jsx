@@ -1,4 +1,6 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
+import { Funnel, BarChart3, Brain, ChevronDown } from 'lucide-react';
+import SecurityTipWidget from './SecurityTipWidget';
 
 /* ── Particle dots that flow between nodes ────────────────── */
 function Connector({ active }) {
@@ -7,17 +9,20 @@ function Connector({ active }) {
       <span className="pipeline-particle" />
       <span className="pipeline-particle" />
       <span className="pipeline-particle" />
+      <div className="connector-label">
+        <ChevronDown size={10} />
+      </div>
     </div>
   );
 }
 
-/* ── Drain3 micro visualization ───────────────────────────── */
+/* ── Drain3 — "The Cleaning Funnel" ───────────────────────── */
 function Drain3Visual() {
   const [idx, setIdx] = useState(0);
   const examples = [
-    { raw: 'Failed password for root from 192.168.1.45 port 22', parsed: 'Failed password for <*> from <*> port <*>' },
-    { raw: 'OOM killer triggered pid 3847 memory 98%', parsed: 'OOM killer triggered pid <*> memory <*>' },
-    { raw: 'Connection refused from 10.0.0.12:5432', parsed: 'Connection refused from <*>' },
+    { raw: 'Failed password for root from 192.168.1.45 port 22', parsed: 'Failed password for <*> from <*> port <*>', highlight: 'Variables extracted → wildcards' },
+    { raw: 'OOM killer triggered pid 3847 memory 98%', parsed: 'OOM killer triggered pid <*> memory <*>', highlight: 'Dynamic values generalized' },
+    { raw: 'Connection refused from 10.0.0.12:5432', parsed: 'Connection refused from <*>', highlight: 'IP address → wildcard' },
   ];
 
   useEffect(() => {
@@ -29,98 +34,158 @@ function Drain3Visual() {
 
   return (
     <div className="pipeline-node-visual">
-      <div style={{ marginBottom: 6, color: 'var(--text-dim)', fontSize: '0.6rem', fontWeight: 600, letterSpacing: '0.04em' }}>
-        INPUT
+      {/* Raw input */}
+      <div className="pipeline-visual-section">
+        <div className="pipeline-visual-badge raw">RAW INPUT</div>
+        <div className="pipeline-visual-log raw-line">{ex.raw}</div>
       </div>
-      <div style={{ color: 'var(--text-secondary)', fontSize: '0.64rem', marginBottom: 8, wordBreak: 'break-all', transition: 'opacity 0.3s', minHeight: '1.3em' }}>
-        {ex.raw}
-      </div>
-      <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 6 }}>
-        <span style={{ color: 'var(--cyan)', fontSize: '0.8rem' }}>↓</span>
-        <span style={{ color: 'var(--text-dim)', fontSize: '0.58rem', fontWeight: 600 }}>TEMPLATE</span>
-      </div>
-      <div style={{ color: 'var(--cyan)', fontSize: '0.64rem', wordBreak: 'break-all', transition: 'opacity 0.3s', minHeight: '1.3em' }}>
-        {ex.parsed.split(/(<\*>)/g).map((part, i) =>
-          part === '<*>' ? <span key={i} className="highlight" style={{ animation: 'pulse-glow 2s ease infinite' }}>{'<*>'}</span> : part
-        )}
-      </div>
-    </div>
-  );
-}
 
-/* ── TF-IDF micro visualization ───────────────────────────── */
-function TfidfVisual() {
-  return (
-    <div className="pipeline-node-visual">
-      <div style={{ marginBottom: 8, color: 'var(--text-dim)', fontSize: '0.6rem', fontWeight: 600, letterSpacing: '0.04em' }}>
-        SCORING
-      </div>
-      {[
-        { label: 'failed password', score: 85, color: 'var(--red)' },
-        { label: 'oom killer', score: 72, color: 'var(--amber)' },
-        { label: 'session opened', score: 12, color: 'var(--text-dim)' },
-      ].map((item, i) => (
-        <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: i < 2 ? 6 : 0 }}>
-          <span style={{ fontSize: '0.6rem', color: 'var(--text-secondary)', width: 90, flexShrink: 0, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
-            {item.label}
-          </span>
-          <div className="score-bar" style={{ flex: 1 }}>
-            <div
-              className="score-bar-fill"
-              style={{
-                background: item.color,
-                width: `${item.score}%`,
-                animation: `score-fill 3s ease-in-out infinite alternate`,
-                animationDelay: `${i * 0.4}s`,
-                boxShadow: `0 0 6px ${item.color}`,
-              }}
-            />
-          </div>
-          <span style={{ fontSize: '0.58rem', color: 'var(--text-dim)', fontFamily: 'var(--font-mono)', width: 30, textAlign: 'right' }}>
-            0.{item.score}
-          </span>
+      {/* Funnel animation */}
+      <div className="pipeline-funnel">
+        <div className="funnel-arrow">
+          <Funnel size={14} />
         </div>
-      ))}
+        <span className="funnel-label">{ex.highlight}</span>
+      </div>
+
+      {/* Clean output */}
+      <div className="pipeline-visual-section">
+        <div className="pipeline-visual-badge clean">TEMPLATE</div>
+        <div className="pipeline-visual-log clean-line">
+          {ex.parsed.split(/(<\*>)/g).map((part, i) =>
+            part === '<*>' ? (
+              <span key={i} className="wildcard-token">{part}</span>
+            ) : part
+          )}
+        </div>
+      </div>
     </div>
   );
 }
 
-/* ── T5 AI micro visualization ────────────────────────────── */
-function T5Visual() {
-  const [text, setText] = useState('');
-  const fullText = 'Critical: Multiple SSH brute-force attacks detected targeting root credentials...';
+/* ── TF-IDF — "The Rarity Race" ──────────────────────────── */
+function TfidfVisual() {
+  const [tick, setTick] = useState(0);
+  const items = [
+    { label: 'failed password', score: 87, color: 'var(--red)', emoji: '🔴' },
+    { label: 'oom killer', score: 72, color: 'var(--amber)', emoji: '🟠' },
+    { label: 'session opened', score: 15, color: 'var(--text-dim)', emoji: '⚪' },
+  ];
 
   useEffect(() => {
-    let i = 0;
-    setText('');
-    const iv = setInterval(() => {
-      i++;
-      setText(fullText.slice(0, i));
-      if (i >= fullText.length) {
-        clearInterval(iv);
-        setTimeout(() => {
-          setText('');
-          i = 0;
-          // restart
-          const iv2 = setInterval(() => {
-            i++;
-            setText(fullText.slice(0, i));
-            if (i >= fullText.length) clearInterval(iv2);
-          }, 45);
-        }, 2000);
-      }
-    }, 45);
+    const iv = setInterval(() => setTick(p => p + 1), 3000);
     return () => clearInterval(iv);
+  }, []);
+
+  // Shuffle scores slightly on each tick for the "racing" effect
+  const animatedItems = items.map((item, i) => ({
+    ...item,
+    score: Math.min(95, Math.max(10, item.score + (tick % 2 === 0 ? (i === 0 ? 5 : -3) : (i === 0 ? -3 : 3)))),
+  }));
+
+  // Sort by score descending
+  const sorted = [...animatedItems].sort((a, b) => b.score - a.score);
+
+  return (
+    <div className="pipeline-node-visual">
+      <div className="pipeline-visual-badge scoring">RARITY RANKING</div>
+      <div className="tfidf-race">
+        {sorted.map((item, i) => (
+          <div key={item.label} className="tfidf-bar-row" style={{ order: i }}>
+            <div className="tfidf-rank" style={{ color: item.color }}>#{i + 1}</div>
+            <span className="tfidf-label">{item.label}</span>
+            <div className="tfidf-bar-track">
+              <div
+                className="tfidf-bar-fill"
+                style={{
+                  width: `${item.score}%`,
+                  background: item.color,
+                  boxShadow: `0 0 8px ${item.color}60`,
+                  transition: 'width 1s cubic-bezier(0.23, 1, 0.32, 1)',
+                }}
+              />
+            </div>
+            <span className="tfidf-score">0.{String(item.score).padStart(2, '0')}</span>
+          </div>
+        ))}
+      </div>
+      <div className="tfidf-insight">
+        <BarChart3 size={10} />
+        <span>Rare templates rise to the top — common ones fade</span>
+      </div>
+    </div>
+  );
+}
+
+/* ── T5 AI — "The Decoder" ────────────────────────────────── */
+function T5Visual() {
+  const [phase, setPhase] = useState('template');
+  const [text, setText] = useState('');
+
+  const templateText = 'Failed password for <*> from <*> port <*>';
+  const decodedText = '🔴 Brute Force Attack detected — multiple failed SSH login attempts from external IP targeting root credentials.';
+
+  useEffect(() => {
+    let timer;
+    const cycle = () => {
+      // Phase 1: Show template
+      setPhase('template');
+      setText(templateText);
+
+      // Phase 2: Morphing animation
+      timer = setTimeout(() => {
+        setPhase('morphing');
+        setText('');
+
+        // Phase 3: Type out decoded text
+        timer = setTimeout(() => {
+          setPhase('decoded');
+          let i = 0;
+          const iv = setInterval(() => {
+            i++;
+            setText(decodedText.slice(0, i));
+            if (i >= decodedText.length) {
+              clearInterval(iv);
+              // Restart cycle
+              timer = setTimeout(cycle, 3000);
+            }
+          }, 30);
+        }, 800);
+      }, 2500);
+    };
+
+    cycle();
+    return () => { clearTimeout(timer); };
   }, []);
 
   return (
     <div className="pipeline-node-visual">
-      <div style={{ marginBottom: 6, color: 'var(--text-dim)', fontSize: '0.6rem', fontWeight: 600, letterSpacing: '0.04em' }}>
-        AI VERDICT
-      </div>
-      <div style={{ color: 'var(--green)', fontSize: '0.64rem', minHeight: '2.6em', lineHeight: 1.5 }}>
-        {text}
-        <span className="typing-cursor" />
+      <div className="pipeline-visual-badge ai">AI TRANSLATION</div>
+
+      <div className="t5-morph-container">
+        {phase === 'template' && (
+          <div className="t5-template-line">
+            {templateText.split(/(<\*>)/g).map((part, i) =>
+              part === '<*>' ? (
+                <span key={i} className="wildcard-token">{part}</span>
+              ) : <span key={i} className="t5-dim">{part}</span>
+            )}
+          </div>
+        )}
+
+        {phase === 'morphing' && (
+          <div className="t5-morphing">
+            <Brain size={16} className="t5-brain-icon" />
+            <span>Decoding threat intelligence…</span>
+          </div>
+        )}
+
+        {phase === 'decoded' && (
+          <div className="t5-decoded-line">
+            {text}
+            <span className="typing-cursor" />
+          </div>
+        )}
       </div>
     </div>
   );
@@ -144,11 +209,7 @@ export default function PipelineWaterfall({ analyzing }) {
   }, [analyzing]);
 
   return (
-    <div className="waterfall-panel">
-      <div className="waterfall-header">
-        <h3>How It Works</h3>
-      </div>
-
+    <div className="waterfall-panel no-header">
       <div className="waterfall-content">
         <div className="pipeline-flow">
           {/* ── Phase 1: Drain3 ──────────────────────── */}
@@ -156,10 +217,10 @@ export default function PipelineWaterfall({ analyzing }) {
             <div className="pipeline-node-header">
               <div className="pipeline-node-dot drain3" />
               <span className="pipeline-node-title">Drain3</span>
-              <span className="pipeline-node-phase">Phase 1</span>
+              <span className="pipeline-node-phase">Phase 1 · Cleaning</span>
             </div>
             <p className="pipeline-node-desc">
-              Extracts structural templates from raw logs, replacing dynamic values with wildcards.
+              Raw logs enter the funnel — variables are extracted, templates emerge.
             </p>
             <Drain3Visual />
           </div>
@@ -172,10 +233,10 @@ export default function PipelineWaterfall({ analyzing }) {
             <div className="pipeline-node-header">
               <div className="pipeline-node-dot tfidf" />
               <span className="pipeline-node-title">TF-IDF Scoring</span>
-              <span className="pipeline-node-phase">Phase 2</span>
+              <span className="pipeline-node-phase">Phase 2 · Ranking</span>
             </div>
             <p className="pipeline-node-desc">
-              Ranks templates by rarity. Critical keywords get boosted scores.
+              Templates race by rarity — critical patterns rise to the top.
             </p>
             <TfidfVisual />
           </div>
@@ -188,10 +249,10 @@ export default function PipelineWaterfall({ analyzing }) {
             <div className="pipeline-node-header">
               <div className="pipeline-node-dot t5" />
               <span className="pipeline-node-title">T5 Summarizer</span>
-              <span className="pipeline-node-phase">Phase 3</span>
+              <span className="pipeline-node-phase">Phase 3 · Decoding</span>
             </div>
             <p className="pipeline-node-desc">
-              AI generates a human-readable verdict from the top-ranked anomalies.
+              Cryptic templates transform into clear threat intelligence.
             </p>
             <T5Visual />
           </div>

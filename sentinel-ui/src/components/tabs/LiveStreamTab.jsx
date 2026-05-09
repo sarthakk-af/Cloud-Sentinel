@@ -1,4 +1,4 @@
-import { useRef } from 'react';
+import { useRef, useState, useEffect } from 'react';
 import * as Icons from 'lucide-react';
 import { LIVE_SCENARIOS } from '../../utils/constants';
 import { getTerminalClass } from '../../utils/severity';
@@ -7,7 +7,22 @@ export default function LiveStreamTab({
   isStreaming, terminalLogs, injectingScenario,
   startStream, stopStream, handleInject, cancelInject,
 }) {
-  const terminalEndRef = useRef(null);
+  const [userScrolled, setUserScrolled] = useState(false);
+  const terminalWindowRef = useRef(null);
+
+  // Smart scroll effect (Container only)
+  useEffect(() => {
+    if (!userScrolled && terminalWindowRef.current) {
+      terminalWindowRef.current.scrollTop = terminalWindowRef.current.scrollHeight;
+    }
+  }, [terminalLogs, userScrolled]);
+
+  const handleScroll = (e) => {
+    const { scrollTop, scrollHeight, clientHeight } = e.currentTarget;
+    // If user is within 50px of bottom, consider them "at bottom"
+    const isAtBottom = scrollHeight - scrollTop - clientHeight < 50;
+    setUserScrolled(!isAtBottom);
+  };
 
   return (
     <div className="card" style={{ animation: 'fadeUp 0.4s ease forwards' }}>
@@ -66,7 +81,7 @@ export default function LiveStreamTab({
         </div>
       )}
 
-      <div className="terminal-window" id="terminal-output">
+      <div className="terminal-window" id="terminal-output" ref={terminalWindowRef} onScroll={handleScroll}>
         {terminalLogs.length === 0 && (
           <span style={{ color: 'var(--text-dim)' }}>
             Waiting for connection... Click "Connect" to start.
@@ -76,7 +91,6 @@ export default function LiveStreamTab({
           <p key={i} className={getTerminalClass(line)}>{line}</p>
         ))}
         <span className="blinking-cursor" />
-        <div ref={terminalEndRef} />
       </div>
 
       <div style={{ display: 'flex', justifyContent: 'center', marginTop: 12 }}>

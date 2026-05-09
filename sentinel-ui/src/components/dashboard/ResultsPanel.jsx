@@ -4,7 +4,7 @@ import SummaryBox from './SummaryBox';
 import HealthGauge from './HealthGauge';
 import ClusterList from './ClusterList';
 
-export default function ResultsPanel({ results }) {
+export default function ResultsPanel({ results, onInvestigate }) {
   if (!results) {
     return (
       <div className="empty-state" style={{ marginTop: 32 }}>
@@ -26,9 +26,9 @@ export default function ResultsPanel({ results }) {
         <div className="section-divider-line" />
       </div>
       <StatsGrid results={results} />
-      <SummaryBox summary={results.ai_summary} />
-      <HealthGauge summary={results.ai_summary} clusters={clusters} />
-      <ClusterList clusters={clusters} />
+      <SummaryBox summary={results.ai_summary} status={results.system_status} />
+      <HealthGauge status={results.system_status} score={results.threat_score} clusters={clusters} />
+      <ClusterList clusters={clusters} onInvestigate={onInvestigate} />
     </div>
   );
 }
