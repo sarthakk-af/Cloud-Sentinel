@@ -83,7 +83,8 @@ class LogParser:
             {
                 "id": cluster.cluster_id, 
                 "template": cluster.get_template(),
-                "original_log": self.cluster_examples.get(cluster.cluster_id, "")
+                "original_log": self.cluster_examples.get(cluster.cluster_id, ""),
+                "size": cluster.size
             }
             for cluster in self.template_miner.drain.clusters
         ]

@@ -59,13 +59,20 @@ export default function FileUploadTab({ onResults, analyzing, setAnalyzing }) {
       const allLines = text.split('\n').filter(l => l.trim());
       const sampleLines = allLines.slice(0, 5);
       const format = detectFormat(sampleLines);
-      const criticalHits = quickScan(allLines.slice(0, 50));
+      const criticalHits = quickScan(allLines);
+
+      // If file is larger than 50KB, estimate total lines based on ratio
+      const isPartial = f.size > 50000;
+      const estimatedTotalLines = isPartial 
+        ? Math.floor(allLines.length * (f.size / 50000))
+        : allLines.length;
 
       // Stagger the triage reveal
       setTimeout(() => {
         setTriageData({
           format,
-          totalLines: allLines.length,
+          totalLines: estimatedTotalLines,
+          isEstimated: isPartial,
           sampleLines,
           criticalHits,
         });
@@ -215,15 +222,15 @@ export default function FileUploadTab({ onResults, analyzing, setAnalyzing }) {
                   </span>
                 </div>
                 <div className="triage-stat">
-                  <span className="triage-stat-label">Lines</span>
+                  <span className="triage-stat-label">Lines {triageData.isEstimated ? '(Est.)' : ''}</span>
                   <span className="triage-stat-value" style={{ color: 'var(--violet)' }}>
-                    {triageData.totalLines.toLocaleString()}
+                    {triageData.isEstimated ? '~' : ''}{triageData.totalLines.toLocaleString()}
                   </span>
                 </div>
                 <div className="triage-stat">
-                  <span className="triage-stat-label">Threat Keywords</span>
+                  <span className="triage-stat-label">Threat Keywords {triageData.isEstimated ? '(In Sample)' : ''}</span>
                   <span className="triage-stat-value" style={{ color: triageData.criticalHits > 0 ? 'var(--red)' : 'var(--green)' }}>
-                    {triageData.criticalHits > 0 ? `${triageData.criticalHits} found` : 'None detected'}
+                    {triageData.criticalHits > 0 ? `${triageData.criticalHits} found` : 'None in sample'}
                   </span>
                 </div>
               </div>

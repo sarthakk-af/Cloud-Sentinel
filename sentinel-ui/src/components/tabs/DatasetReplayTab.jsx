@@ -6,7 +6,7 @@ import { API } from '../../utils/constants';
 import ScanningBeam from '../effects/ScanningBeam';
 
 const REPLAY_INFO = [
-  { label: 'Dataset', value: 'sample_syslog.log' },
+  { label: 'Dataset', value: 'sample_syslog.log (fallback: bgl_sample.log)' },
   { label: 'Speed', value: 'Turbo (0ms)' },
   { label: 'Max Lines', value: '2,000 logs' },
   { label: 'Pipeline', value: 'Full 3-Phase' },
@@ -33,7 +33,7 @@ export default function DatasetReplayTab({ onResults, analyzing, setAnalyzing })
 
       <p style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', marginBottom: 20 }}>
         Run the full 3-phase pipeline against the{' '}
-        <span style={{ color: 'var(--text-bright)', fontWeight: 500 }}>BGL Supercomputer Dataset</span>
+        <span style={{ color: 'var(--text-bright)', fontWeight: 500 }}>bundled syslog dataset</span>
         {' '}— 2,000 log lines at turbo speed.
       </p>
 

@@ -3,7 +3,7 @@ from engine.analyzer import LogAnalyzer
 
 def test_analyzer_init():
     analyzer = LogAnalyzer()
-    assert len(analyzer.critical_keywords) > 0
+    assert analyzer.vectorizer is not None
 
 def test_analyze_templates():
     analyzer = LogAnalyzer()

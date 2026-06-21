@@ -16,6 +16,15 @@ export function useStreamConnection() {
   const eventSourceRef = useRef(null);
   const sessionIdRef   = useRef(null);
 
+  /* ── Stop SSE ───────────────────────────────────────────────── */
+  const stopStream = useCallback(() => {
+    setIsStreaming(false);
+    eventSourceRef.current?.close();
+    eventSourceRef.current = null;
+    sessionIdRef.current   = null;
+    setInjectingScenario(null);
+  }, []);
+
   /* ── Start SSE ──────────────────────────────────────────────── */
   const startStream = useCallback(() => {
     setStreamResults(null);
@@ -80,16 +89,7 @@ export function useStreamConnection() {
       });
       stopStream();
     };
-  }, []);
-
-  /* ── Stop SSE ───────────────────────────────────────────────── */
-  const stopStream = useCallback(() => {
-    setIsStreaming(false);
-    eventSourceRef.current?.close();
-    eventSourceRef.current = null;
-    sessionIdRef.current   = null;
-    setInjectingScenario(null);
-  }, []);
+  }, [stopStream]);
 
   /* ── Inject incident ────────────────────────────────────────── */
   const handleInject = useCallback(async (scenario) => {

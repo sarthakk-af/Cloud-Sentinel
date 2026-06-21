@@ -67,7 +67,7 @@ function TfidfVisual() {
       </div>
       <div className="tfidf-stats">
         <span className="stat-label">Anomaly Density:</span>
-        <span className="stat-value">0.{(points[11] / 100).toFixed(2)}</span>
+        <span className="stat-value">{(points[11] / 100).toFixed(2)}</span>
       </div>
     </div>
   );

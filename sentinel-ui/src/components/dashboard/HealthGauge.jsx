@@ -77,14 +77,24 @@ function GaugeArc({ status, score }) {
 
 const RANK_COLORS = ['var(--red)', 'var(--amber)', 'var(--cyan)'];
 
-export default function HealthGauge({ status, score, clusters }) {
+export default function HealthGauge({ status, score, clusters, summary }) {
   if (!clusters?.length) return null;
+
+  const criticalCount = clusters.filter(c => (c.importance_score || 0) >= 1.4).length;
+  const totalEvents = clusters.reduce((sum, c) => sum + (c.size || 1), 0);
+  
+  const ips = new Set();
+  clusters.forEach(c => {
+    const m = (c.original_log || '').match(/\b\d{1,3}(?:-\d{1,3}){3}\b|\b\d{1,3}(?:\.\d{1,3}){3}\b/); // Matches 10.0.0.1 or 10-0-0-1
+    if (m) ips.add(m[0]);
+  });
+  const ipCount = ips.size;
 
   return (
     <div className="card gauge-card" style={{ animation: 'fadeUp 0.45s ease forwards', animationDelay: '0.1s', opacity: 0 }}>
       <div className="card-header" style={{ marginBottom: 8 }}>
         <Activity size={16} style={{ color: 'var(--cyan)' }} />
-        <span className="card-title">Sentinel State</span>
+        <span className="card-title">Sentinel state</span>
       </div>
 
       <div className="gauge-layout">
@@ -94,49 +104,71 @@ export default function HealthGauge({ status, score, clusters }) {
 
         <div className="gauge-divider" />
 
-        <div className="gauge-breakdown">
-          <div className="card-label" style={{ marginBottom: 6 }}>Top Threat Clusters</div>
-          {clusters.slice(0, 3).map((c, i) => {
-            const max = clusters[0].importance_score || 1;
-            const pct = Math.min(100, ((c.importance_score || 0) / max) * 100);
-            
-            // Fix: Use actual cluster severity for color, not rank
-            const score = c.importance_score || 0;
-            let barColor = 'var(--cyan)'; // Nominal
-            if (score >= 0.9) barColor = 'var(--red)';
-            else if (score >= 0.4) barColor = 'var(--amber)';
+        <div className="gauge-breakdown" style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', flex: 1, paddingLeft: 20 }}>
+          <div className="card-label" style={{ marginBottom: 12, letterSpacing: '0.05em', textTransform: 'uppercase' }}>Intelligence Briefing</div>
+          <p style={{
+            fontSize: '1.2rem',
+            lineHeight: 1.5,
+            color: 'var(--text-primary)',
+            fontWeight: 600,
+            marginBottom: 20
+          }}>
+            {summary || 'Analysis complete. System is performing within expected parameters.'}
+          </p>
+          
+          {/* Sub-stats row */}
+          <div style={{ display: 'flex', gap: 32 }}>
+            <div style={{ display: 'flex', flexDirection: 'column' }}>
+              <span style={{ fontSize: '1.4rem', fontWeight: 800, color: 'var(--red)', lineHeight: 1.2 }}>{criticalCount}</span>
+              <span style={{ fontSize: '0.75rem', fontWeight: 500, color: 'var(--text-dim)' }}>critical clusters</span>
+            </div>
+            <div style={{ display: 'flex', flexDirection: 'column' }}>
+              <span style={{ fontSize: '1.4rem', fontWeight: 800, color: 'var(--text-primary)', lineHeight: 1.2 }}>{totalEvents.toLocaleString()}</span>
+              <span style={{ fontSize: '0.75rem', fontWeight: 500, color: 'var(--text-dim)' }}>total events</span>
+            </div>
+            <div style={{ display: 'flex', flexDirection: 'column' }}>
+              <span style={{ fontSize: '1.4rem', fontWeight: 800, color: 'var(--text-primary)', lineHeight: 1.2 }}>{ipCount}</span>
+              <span style={{ fontSize: '0.75rem', fontWeight: 500, color: 'var(--text-dim)' }}>source IP{ipCount !== 1 ? 's' : ''}</span>
+            </div>
+          </div>
 
-            return (
-              <Tooltip
-                key={i}
-                label={c.template?.slice(0, 80) || `Cluster #${i + 1}`}
-                position="top"
-                withArrow
-                multiline
-                maw={350}
-              >
-                <div className="gauge-threat-row">
-                  <span className="gauge-rank" style={{ color: barColor, opacity: 0.8 }}>
-                    #{i + 1}
-                  </span>
-                  <Progress
-                    value={pct}
-                    color={barColor}
-                    size={5}
-                    radius={4}
-                    style={{ 
-                      flex: 1, 
-                      transition: 'width 1s ease',
-                      filter: score >= 0.9 ? 'drop-shadow(0 0 4px var(--red))' : 'none'
-                    }}
-                  />
-                  <span className="gauge-score" style={{ color: barColor }}>
-                    {score.toFixed(3)}
-                  </span>
-                </div>
-              </Tooltip>
-            );
-          })}
+          {/* Action Plan */}
+          <div style={{ marginTop: 24, padding: '12px 16px', background: 'rgba(0, 255, 200, 0.05)', border: '1px solid rgba(0, 255, 200, 0.15)', borderRadius: '6px', display: 'flex', gap: '12px', alignItems: 'flex-start' }}>
+            <div style={{ color: 'var(--green)', marginTop: '2px' }}>
+              <ShieldCheck size={18} />
+            </div>
+            <div>
+              <div style={{ fontSize: '0.75rem', fontWeight: 700, color: 'var(--green)', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '4px' }}>Recommended Action Plan</div>
+              <div style={{ fontSize: '0.85rem', color: 'var(--text-primary)', lineHeight: 1.4 }}>
+                {(() => {
+                  const s = (summary || '').toLowerCase();
+                  
+                  if (s.includes('ransom') || s.includes('encrypt') || s.includes('locked') || s.includes('deletion')) 
+                    return "CATASTROPHIC INCIDENT: Immediate EDR isolation required. Sever network egress, halt all backup destruction tasks, and initiate forensic memory capture.";
+                  if (s.includes('backdoor') || s.includes('reverse shell') || s.includes('malware') || s.includes('c2')) 
+                    return "ACTIVE COMPROMISE: Kill outbound connections to non-corporate ASNs immediately. Terminate unauthorized shells and isolate the host.";
+                  if (s.includes('compromise') || s.includes('privilege') || s.includes('escalation') || s.includes('suid')) 
+                    return "PRIVILEGE ESCALATION: A malicious actor has gained root access. Freeze the system state, revoke all active sessions, and lock down IAM.";
+                    
+                  if (s.includes('unauthorized') || s.includes('brute') || s.includes('login') || s.includes('credential') || s.includes('password')) 
+                    return "Block offending source IPs at the perimeter firewall immediately. Mandate key-based authentication for SSH and audit recent successful logins.";
+                  if (s.includes('memory') || s.includes('oom') || s.includes('crash') || s.includes('panic')) 
+                    return "Investigate daemon memory leaks. Restart affected services to clear memory pressure and consider scaling the instance RAM limits.";
+                  if (s.includes('ssl') || s.includes('certificate')) 
+                    return "Renew expired SSL certificates immediately and verify file permissions on the web server's /etc/ssl configuration directories.";
+                  if (s.includes('space') || s.includes('disk') || s.includes('quota')) 
+                    return "Clear temporary logs and caches immediately. Expand the primary storage volume to prevent impending database corruption.";
+                  if (s.includes('deadlock') || s.includes('transaction')) 
+                    return "Database transaction gridlock detected. Identify and terminate long-running queries; review application logic for locking order issues.";
+                  if (s.includes('temperature') || s.includes('cpu') || s.includes('throttle')) 
+                    return "Thermal throttling active. Investigate CPU-heavy processes, check hardware cooling, and redistribute load across the cluster.";
+                  if (s.includes('timeout') || s.includes('500') || s.includes('flood') || s.includes('rate')) 
+                    return "Service degradation detected. Implement strict rate limiting, scale up application replicas, and verify upstream service health.";
+                  return "Continue monitoring the system logs. No immediate manual intervention required at this threshold.";
+                })()}
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>

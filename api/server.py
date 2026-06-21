@@ -16,6 +16,7 @@ from concurrent.futures import ThreadPoolExecutor
 from engine.parser import LogParser
 from engine.analyzer import LogAnalyzer
 from engine.summarizer import LogSummarizer
+from datasets.replay_loader import DatasetReplayer
 from dotenv import load_dotenv
 
 # Configure professional logging
@@ -65,8 +66,7 @@ _startup_time = time.time()
 # Thread pool for CPU-bound summarizer calls (T5 model)
 _thread_pool = ThreadPoolExecutor(max_workers=2)
 
-# Reusable loop reference (set at first async call)
-_event_loop = None
+
 
 # Instantiate shared stateless engines
 logger.info("Waking up Intelligence Engine...")
@@ -75,7 +75,8 @@ try:
     summarizer = LogSummarizer(use_ai=USE_AI, model_name=MODEL_NAME)
     logger.info(f"Intelligence Engine Ready. model={MODEL_NAME}, use_ai={USE_AI}")
 except Exception as e:
-    logger.error(f"Error initializing Engine: {e}")
+    logger.critical(f"FATAL: Engine initialization failed: {e}")
+    raise SystemExit(1)
 
 # In-memory storage for the latest analysis (used by upload mode)
 latest_analysis = {
@@ -374,18 +375,18 @@ async def _run_ai_pipeline(stream_parser: LogParser, lines: list):
 
     unique_templates = stream_parser.get_all_templates()
     ranked_templates = analyzer.analyze_templates(unique_templates)
-    top_5 = ranked_templates[:5]
+    top_clusters = ranked_templates[:50]
 
     # Calculate global health based on current cluster state
-    status, score = calculate_system_health(top_5)
+    status, score = calculate_system_health(top_clusters)
 
     # Offload blocking T5 call to thread pool
     summary = await loop.run_in_executor(
         _thread_pool,
         summarizer.summarize,
-        top_5[:2]
+        top_clusters[:2]
     )
-    return unique_templates, ranked_templates, top_5, summary, status, score
+    return unique_templates, ranked_templates, top_clusters, summary, status, score
 
 
 # ── API Endpoints ────────────────────────────────────────────────────────────
@@ -410,15 +411,11 @@ def root_redirect():
 
 
 @app.get("/api/replay")
-def replay_dataset():
+async def replay_dataset():
     """
     Runs the full AI pipeline on the bundled sample_syslog.log dataset.
     Great for demonstrating capabilities with a rich, realistic log corpus.
     """
-    import sys
-    sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
-    from datasets.replay_loader import DatasetReplayer
-
     # Prefer the large real syslog dataset; fall back to the small stub
     candidates = [
         os.path.join(DATASETS_DIR, "sample_syslog.log"),
@@ -429,39 +426,46 @@ def replay_dataset():
         return JSONResponse(status_code=404, content={"error": "No dataset file found in datasets/"})
 
     start_time = time.time()
-    stale = os.path.join(DATA_DIR, "drain3_replay.bin")
-    if os.path.exists(stale):
-        os.remove(stale)
-    replay_parser = LogParser(persistence_path=stale)
-
-    lines_parsed = []
-    def on_line(line):
-        if len(lines_parsed) < 2000:   # cap at 2000 lines for speed
-            replay_parser.parse_log(line)
-            lines_parsed.append(line)
-
-    replayer = DatasetReplayer(dataset_file, callback=on_line, speed="turbo")
-    replayer.start()
-
-    unique_templates = replay_parser.get_all_templates()
-    ranked_templates = analyzer.analyze_templates(unique_templates)
-    top_5 = ranked_templates[:5]
-    summary = summarizer.summarize(top_5[:2])
+    req_id = uuid.uuid4().hex[:8]
+    bin_path = os.path.join(DATA_DIR, f"drain3_replay_{req_id}.bin")
     
-    # Calculate health for replay
-    sys_status, sys_score = calculate_system_health(top_5)
+    try:
+        replay_parser = LogParser(persistence_path=bin_path)
 
-    return {
-        "status": "complete",
-        "system_status": sys_status,
-        "threat_score": sys_score,
-        "dataset": os.path.basename(dataset_file),
-        "total_logs": len(lines_parsed),
-        "unique_templates": len(unique_templates),
-        "top_clusters": top_5,
-        "ai_summary": summary,
-        "processing_time_ms": round((time.time() - start_time) * 1000)
-    }
+        lines_parsed = []
+        def on_line(line):
+            if len(lines_parsed) < 2000:   # cap at 2000 lines for speed
+                replay_parser.parse_log(line)
+                lines_parsed.append(line)
+
+        replayer = DatasetReplayer(dataset_file, callback=on_line, speed="turbo")
+        replayer.start()
+
+        unique_templates = replay_parser.get_all_templates()
+        ranked_templates = analyzer.analyze_templates(unique_templates)
+        top_clusters = ranked_templates[:50]
+        # Offload blocking T5 call to thread pool
+        loop = asyncio.get_running_loop()
+        summary = await loop.run_in_executor(_thread_pool, summarizer.summarize, top_clusters[:2])
+        
+        # Calculate health for replay
+        sys_status, sys_score = calculate_system_health(top_clusters)
+
+        return {
+            "status": "complete",
+            "system_status": sys_status,
+            "threat_score": sys_score,
+            "dataset": os.path.basename(dataset_file),
+            "total_logs": len(lines_parsed),
+            "unique_templates": len(unique_templates),
+            "top_clusters": top_clusters,
+            "ai_summary": summary,
+            "processing_time_ms": round((time.time() - start_time) * 1000)
+        }
+    finally:
+        if os.path.exists(bin_path):
+            try: os.remove(bin_path)
+            except OSError: pass
 
 
 async def run_analysis_pipeline(text: str):
@@ -476,16 +480,16 @@ async def run_analysis_pipeline(text: str):
         latest_analysis["status"] = "error"
         return
 
-    try:
-        stale = os.path.join(DATA_DIR, "drain3_state_upload.bin")
-        if os.path.exists(stale):
-            os.remove(stale)
-        fresh_parser = LogParser(persistence_path=stale)
+    req_id = uuid.uuid4().hex[:8]
+    bin_path = os.path.join(DATA_DIR, f"drain3_upload_{req_id}.bin")
 
-        unique_templates, ranked_templates, top_5, summary, sys_status, sys_score = await _run_ai_pipeline(fresh_parser, log_lines)
+    try:
+        fresh_parser = LogParser(persistence_path=bin_path)
+
+        unique_templates, ranked_templates, top_clusters, summary, sys_status, sys_score = await _run_ai_pipeline(fresh_parser, log_lines)
 
         latest_analysis["unique_templates"] = len(unique_templates)
-        latest_analysis["top_clusters"] = top_5
+        latest_analysis["top_clusters"] = top_clusters
         latest_analysis["system_status"] = sys_status
         latest_analysis["threat_score"] = sys_score
         latest_analysis["ai_summary"] = summary
@@ -496,6 +500,10 @@ async def run_analysis_pipeline(text: str):
         print(f"Error in background pipeline: {e}")
         latest_analysis["status"] = "error"
         latest_analysis["system_status"] = "Unknown"
+    finally:
+        if os.path.exists(bin_path):
+            try: os.remove(bin_path)
+            except OSError: pass
 
 
 @app.post("/api/analyze")
@@ -622,25 +630,28 @@ async def load_library_scenario(scenario: str):
     start_time = time.time()
     log_lines = scenarios[scenario]
 
-    stale = os.path.join(DATA_DIR, f"drain3_demo_{scenario}.bin")
-    if os.path.exists(stale):
-        os.remove(stale)
-    fresh_parser = LogParser(persistence_path=stale)
+    req_id = uuid.uuid4().hex[:8]
+    bin_path = os.path.join(DATA_DIR, f"drain3_demo_{req_id}.bin")
+    
+    try:
+        fresh_parser = LogParser(persistence_path=bin_path)
+        unique_templates, ranked_templates, top_clusters, summary, sys_status, sys_score = await _run_ai_pipeline(fresh_parser, log_lines)
+        end_time = time.time()
 
-    unique_templates, ranked_templates, top_5, summary, sys_status, sys_score = await _run_ai_pipeline(fresh_parser, log_lines)
-
-    end_time = time.time()
-
-    return {
-        "status": "complete",
-        "system_status": sys_status,
-        "threat_score": sys_score,
-        "total_logs": len(log_lines),
-        "unique_templates": len(unique_templates),
-        "top_clusters": top_5,
-        "ai_summary": summary,
-        "processing_time_ms": round((end_time - start_time) * 1000)
-    }
+        return {
+            "status": "complete",
+            "system_status": sys_status,
+            "threat_score": sys_score,
+            "total_logs": len(log_lines),
+            "unique_templates": len(unique_templates),
+            "top_clusters": top_clusters,
+            "ai_summary": summary,
+            "processing_time_ms": round((end_time - start_time) * 1000)
+        }
+    finally:
+        if os.path.exists(bin_path):
+            try: os.remove(bin_path)
+            except OSError: pass
 
 
 # ── Live Stream (SSE) ────────────────────────────────────────────────────────
@@ -722,6 +733,7 @@ async def log_stream():
         yield f"data: {json.dumps({'type': 'session', 'session_id': session_id})}\n\n"
 
         accumulated_lines = []
+        total_logs_count  = 0
         last_emit_time    = time.time()
 
         try:
@@ -743,9 +755,11 @@ async def log_stream():
                 if should_emit:
                     chunk_start = time.time()
                     try:
-                        unique_templates, ranked_templates, top_5, summary, sys_status, sys_score = await _run_ai_pipeline(
+                        unique_templates, ranked_templates, top_clusters, summary, sys_status, sys_score = await _run_ai_pipeline(
                             stream_parser, accumulated_lines
                         )
+
+                        total_logs_count += len(accumulated_lines)
 
                         payload = {
                             "type": "analysis",
@@ -753,9 +767,9 @@ async def log_stream():
                             "system_status": sys_status,
                             "threat_score": sys_score,
                             "new_logs_chunk": len(accumulated_lines),
-                            "total_logs": len(accumulated_lines),
+                            "total_logs": total_logs_count,
                             "unique_templates": len(unique_templates),
-                            "top_clusters": top_5,
+                            "top_clusters": top_clusters,
                             "ai_summary": summary,
                             "processing_time_ms": round((time.time() - chunk_start) * 1000),
                             "raw_lines": accumulated_lines[-6:],
@@ -785,6 +799,13 @@ async def log_stream():
             tasks_to_gather = [t for t in [chaos_task, incident_task] if t]
             if tasks_to_gather:
                 await asyncio.gather(*tasks_to_gather, return_exceptions=True)
+            # Clean up session-specific Drain3 persistence file
+            bin_path = os.path.join(DATA_DIR, f"drain3_stream_{session_id[:8]}.bin")
+            try:
+                if os.path.exists(bin_path):
+                    os.remove(bin_path)
+            except OSError:
+                pass
             logger.info(f"[{session_id[:8]}] Session cleaned up. Active sessions: {len(active_streams)}")
 
     return StreamingResponse(

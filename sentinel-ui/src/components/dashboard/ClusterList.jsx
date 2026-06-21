@@ -52,8 +52,7 @@ function getHeadline(cluster) {
   return 'Anomalous Pattern Detected';
 }
 
-export default function StoryCards({ clusters, onInvestigate }) {
-  const [viewMode, setViewMode] = useState('Processed Logs');
+export default function ClusterList({ clusters, onInvestigate }) {
   const [decoderCluster, setDecoderCluster] = useState(null);
   const [decoderIndex, setDecoderIndex] = useState(0);
 
@@ -78,16 +77,6 @@ export default function StoryCards({ clusters, onInvestigate }) {
             <span className="card-title">Threat Intelligence</span>
             <span className="story-count-badge">{clusters.length} clusters</span>
           </div>
-
-          <SegmentedControl
-            size="xs"
-            value={viewMode}
-            onChange={setViewMode}
-            data={[
-              { label: 'Processed Logs', value: 'Processed Logs' },
-              { label: 'Raw Logs', value: 'Raw Logs' },
-            ]}
-          />
         </div>
 
         {/* Legend */}
@@ -109,80 +98,75 @@ export default function StoryCards({ clusters, onInvestigate }) {
         <div className="story-cards-grid">
           {clusters.map((c, i) => {
             const sev = getCardSeverity(c.importance_score || 0);
-            const max = clusters[0].importance_score || 1;
-            const pct = Math.min(100, ((c.importance_score || 0) / max) * 100);
             const { found } = getScoreBreakdown(c);
-            const headline = getHeadline(c);
-            const narrative = getPlainEnglish(c);
 
             return (
               <div
                 key={i}
                 className={`story-card story-card-${sev.level}`}
-                style={{ animationDelay: `${0.15 + i * 0.08}s` }}
+                style={{ 
+                  animationDelay: `${0.15 + i * 0.08}s`,
+                  display: 'flex',
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                  padding: '12px 16px',
+                  gap: '16px'
+                }}
               >
                 {/* Severity stripe */}
                 <div className="story-card-stripe" style={{ background: sev.color }} />
 
-                {/* Content */}
-                <div className="story-card-body">
-                  {/* Top row: severity + score */}
-                  <div className="story-card-meta">
-                    <span className="story-severity-tag" style={{ color: sev.color, borderColor: `${sev.color}44`, background: `${sev.color}10` }}>
-                      {sev.label}
-                    </span>
-                    <Tooltip label="TF-IDF importance + keyword boost" withArrow>
-                      <span className="story-card-score" style={{ color: sev.color }}>
-                        {(c.importance_score || 0).toFixed(3)}
-                      </span>
-                    </Tooltip>
-                  </div>
-
-                  {/* Headline */}
-                  <h4 className="story-card-headline">{headline}</h4>
-
-                  {/* Narrative or technical view */}
-                  {viewMode === 'Processed Logs' ? (
-                    <p className="story-card-narrative">{narrative}</p>
-                  ) : (
-                    <div className="story-card-template">
-                      {(c.template || '').split(/(<\*>)/g).map((part, j) =>
-                        part === '<*>' ? (
-                          <span key={j} className="wildcard-token">{part}</span>
-                        ) : part
-                      )}
-                    </div>
-                  )}
-
-                  {/* Score bar */}
-                  <Progress
-                    value={pct}
-                    size={3}
-                    radius={4}
-                    styles={{ section: { background: sev.color, boxShadow: `0 0 4px ${sev.color}40`, transition: 'width 0.8s ease' } }}
-                  />
-
-                  {/* Keywords found */}
-                  {found.length > 0 && (
-                    <div className="story-card-keywords">
-                      <AlertTriangle size={10} />
-                      {found.slice(0, 3).map(kw => (
-                        <span key={kw} className="story-keyword-tag">{kw}</span>
-                      ))}
-                    </div>
-                  )}
-
-                  {/* Investigate button */}
-                  <button
-                    className="story-investigate-btn"
-                    onClick={() => openDecoder(c, i)}
-                    style={{ borderColor: `${sev.color}33`, color: sev.color }}
-                  >
-                    <Eye size={12} />
-                    Investigate
-                    <ChevronRight size={12} />
-                  </button>
+                {/* Severity Badge */}
+                <div style={{ width: 85, flexShrink: 0 }}>
+                  <span className="story-severity-tag" style={{ color: sev.color, borderColor: `${sev.color}44`, background: `${sev.color}10`, width: '100%', justifyContent: 'center' }}>
+                    {sev.label}
+                  </span>
                 </div>
+
+                {/* Score */}
+                <Tooltip label="TF-IDF importance + keyword boost" withArrow>
+                  <div style={{ width: 50, fontWeight: 700, color: sev.color, fontSize: '0.9rem', flexShrink: 0 }}>
+                    {(c.importance_score || 0).toFixed(3)}
+                  </div>
+                </Tooltip>
+
+                {/* Log Count Multiplier */}
+                <Tooltip label="Number of identical logs compressed into this cluster" withArrow>
+                  <div style={{ padding: '2px 8px', borderRadius: 4, background: 'var(--surface-darker)', border: '1px solid var(--border-color)', color: 'var(--text-dim)', fontSize: '0.75rem', fontWeight: 600, flexShrink: 0 }}>
+                    x{c.size || 1}
+                  </div>
+                </Tooltip>
+
+                {/* Technical Template View */}
+                <div style={{ flex: 1, overflow: 'hidden', whiteSpace: 'nowrap', textOverflow: 'ellipsis' }}>
+                  <div className="story-card-template" style={{ margin: 0, display: 'inline-block', fontSize: '0.85rem' }}>
+                    {(c.template || '').split(/(<\*>)/g).map((part, j) =>
+                      part === '<*>' ? (
+                        <span key={j} className="wildcard-token">{part}</span>
+                      ) : part
+                    )}
+                  </div>
+                </div>
+
+                {/* Threat Triggers */}
+                {found.length > 0 && (
+                  <div style={{ display: 'flex', gap: 6, alignItems: 'center', flexShrink: 0 }}>
+                    <span style={{ fontSize: '0.65rem', color: 'var(--text-dim)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Triggers:</span>
+                    {found.slice(0, 2).map(kw => (
+                      <span key={kw} className="story-keyword-tag" style={{ padding: '2px 6px', fontSize: '0.65rem' }}>{kw}</span>
+                    ))}
+                  </div>
+                )}
+
+                {/* Investigate button */}
+                <button
+                  className="story-investigate-btn"
+                  onClick={() => openDecoder(c, i)}
+                  style={{ borderColor: `${sev.color}33`, color: sev.color, padding: '4px 12px', marginTop: 0, flexShrink: 0 }}
+                >
+                  <Eye size={12} />
+                  Investigate
+                </button>
               </div>
             );
           })}

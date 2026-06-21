@@ -128,7 +128,8 @@ export default function InsightDecoder({ cluster, index, onClose }) {
   const actions = getActions(cluster);
   const ActionIcon = actions.icon;
 
-  const sevColor = index < 2 ? 'var(--red)' : index < 4 ? 'var(--amber)' : 'var(--cyan)';
+  const impScore = cluster.importance_score || 0;
+  const sevColor = impScore >= 1.4 ? 'var(--red)' : impScore >= 0.7 ? 'var(--amber)' : impScore >= 0.35 ? 'var(--violet)' : 'var(--cyan)';
 
   // Close on Escape
   const handleKey = useCallback((e) => {

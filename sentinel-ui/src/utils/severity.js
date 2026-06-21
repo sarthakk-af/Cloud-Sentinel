@@ -61,14 +61,43 @@ export function getPlainEnglish(cluster) {
     return 'Request exceeded maximum wait duration.';
   if (t.includes('heartbeat') || t.includes('started session'))
     return 'Routine health check — system operational.';
+  if (t.includes('ransom') || t.includes('encrypt') || t.includes('locked'))
+    return 'Catastrophic mass-file encryption or ransom note detected — ransomware behavior.';
+  if (t.includes('backdoor') || t.includes('reverse shell') || t.includes('c2'))
+    return 'Active adversary command-and-control connection or reverse shell detected.';
+  if (t.includes('compromise') || t.includes('privilege') || t.includes('suid'))
+    return 'Successful privilege escalation — an actor has secured unauthorized root/admin access.';
+  if (t.includes('deletion') || t.includes('snapshot rm'))
+    return 'Malicious destruction of backup snapshots detected — attempt to prevent recovery.';
+  if (t.includes('anomaly') && t.includes('process tree'))
+    return 'Suspicious process spawning behavior — likely a malicious payload executing.';
   return 'Non-standard log pattern identified.';
 }
 
-/* ── Score breakdown calculator ────────────────────────────────── */
+/* ── Score breakdown calculator (mirrors backend analyzer.py tiers) ── */
 export function getScoreBreakdown(cluster) {
   const tpl = (cluster.template || '').toLowerCase();
-  const found = CRITICAL_KWS.filter(kw => tpl.includes(kw));
-  const kwBoost = parseFloat((found.length * 0.5).toFixed(3));
+
+  // Three-tier keyword system matching backend analyzer.py
+  const EMERGENCY_KWS = ['panic', 'kill', 'oom', 'denied', 'brute', 'failed password', 'space', 'quota', 'critical', 'ransom', 'backdoor', 'compromise', 'malware', 'root', 'suid'];
+  const ALERT_KWS     = ['timeout', 'deadlock', 'full', 'fatal', 'throttle', 'temperature', 'flood', 'warn', 'anomaly'];
+  const PERF_KWS      = ['error', 'fail', 'failed', '500', '502', '503', 'storm', 'ssl', 'expired', 'spike', 'refused'];
+
+  const found = new Set();
+  let kwBoost = 0;
+
+  // Use max() like the backend — highest matching tier wins
+  for (const kw of PERF_KWS) {
+    if (tpl.includes(kw)) { found.add(kw); kwBoost = Math.max(kwBoost, 0.4); }
+  }
+  for (const kw of ALERT_KWS) {
+    if (tpl.includes(kw)) { found.add(kw); kwBoost = Math.max(kwBoost, 0.8); }
+  }
+  for (const kw of EMERGENCY_KWS) {
+    if (tpl.includes(kw)) { found.add(kw); kwBoost = Math.max(kwBoost, 1.5); }
+  }
+
+  kwBoost = parseFloat(kwBoost.toFixed(3));
   const base = parseFloat(Math.max(0, (cluster.importance_score || 0) - kwBoost).toFixed(3));
-  return { base, kwBoost, found };
+  return { base, kwBoost, found: [...found] };
 }

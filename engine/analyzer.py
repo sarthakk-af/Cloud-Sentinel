@@ -46,9 +46,9 @@ class LogAnalyzer:
             
             # Tiered Keyword Boosters
             # 1. Emergency (Red/Critical): System is dying or breached
-            emergencies = ['panic', 'kill', 'oom', 'denied', 'brute', 'failed password']
+            emergencies = ['panic', 'kill', 'oom', 'denied', 'brute', 'failed password', 'space', 'quota', 'critical', 'ransom', 'backdoor', 'compromise', 'malware', 'root', 'suid']
             # 2. Alerts (Amber/Warning): Hardware/Resource failures
-            alerts = ['timeout', 'deadlock', 'full', 'fatal']
+            alerts = ['timeout', 'deadlock', 'full', 'fatal', 'throttle', 'temperature', 'flood', 'warn', 'anomaly']
             # 3. Performance (Violet/Degraded): Application/Web errors
             perf = ['error', 'fail', 'failed', '500', '502', '503', 'storm', 'ssl', 'expired', 'spike', 'refused']
 
